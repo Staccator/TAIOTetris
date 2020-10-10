@@ -3,10 +3,59 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:Tetris"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Filling tetraminoes into rectangle"
+        Width="530"
+        Height="500"
+        Topmost="True"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Background="#333" >
+    <Window.Resources>
+        <Style TargetType="Label">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="FontFamily" Value="David"/>
+            <Setter Property="Foreground" Value="#ccc" />
+            <Setter Property="Background" Value="#333" />
+            <Setter Property="FontSize" Value="25"/>
+            <Setter Property="BorderBrush" Value="#222" />
+            <Setter Property="BorderThickness" Value="5" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="45"></Setter>
+            <Setter Property="Margin" Value="5,6"></Setter>
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="FontFamily" Value="David"/>
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+    </Window.Resources>
+    <Grid Margin="15"
+          Background="#222">
+        <Grid.ColumnDefinitions> <ColumnDefinition Width="300" /> <ColumnDefinition Width="4*" /> </Grid.ColumnDefinitions>
+        
+        <StackPanel Grid.Column="0" Orientation="Vertical">
+            <Grid>
+                <Grid.ColumnDefinitions> <ColumnDefinition Width="3*" /> <ColumnDefinition Width="*" /> </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Content="Liczba klocków" />
+                <xctk:IntegerUpDown Grid.Column="1" Name="ShapeCount" ValueChanged="ShapeCountChanged" Value="3" Minimum="1"
+                                    Margin="5" FontSize="25"/>
+            </Grid>
+            <Button Content="Generuj Klocki"></Button>
+            <Grid>
+                <Grid.ColumnDefinitions> <ColumnDefinition/> <ColumnDefinition/> </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Content="Optymalny" />
+                <Button Grid.Column="1" Content="Heurystyczny"/>
+            </Grid>
+        </StackPanel>
 
+        <Image Grid.Column="1"
+               Name="PaintSurface"
+               VerticalAlignment="Top"
+               Width="400"
+               Height="720" />
     </Grid>
 </Window>

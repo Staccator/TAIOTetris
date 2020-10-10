@@ -1,28 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿﻿using System;
+ using System.Diagnostics;
+using System.IO;
+ using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Windows.Threading;
+ using DesktopApp.Graphics;
+ using Tetris.Graphics;
 
-namespace Tetris
+ namespace Tetris
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         public MainWindow()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
+
+                int columns = 6;
+                int rows = 8;
+                _grid = Visuals.CreateGrid(columns, rows);
+                UpdatePaintSurfaceSize();
+                Display.SetupBitmap(PaintSurface);
+                CompositionTarget.Rendering += UpdateScene;
+                UpdateWindowSize();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+
+        private void UpdatePaintSurfaceSize()
+        {
+            PaintSurface.Width = Visuals.PaintSurfaceWidth;
+            PaintSurface.Height = Visuals.PaintSurfaceHeight;
+        }
+
+        private void UpdateWindowSize()
+        {
+             int margins = 48;
+             int windowWidth = 300 + margins + Visuals.PaintSurfaceWidth;
+             int windowHeight = margins + 21 + Visuals.PaintSurfaceHeight;
+             Width = windowWidth;
+             Height = windowHeight;
         }
     }
 }
