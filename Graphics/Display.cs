@@ -4,9 +4,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using DesktopApp.Models;
 
-namespace DesktopApp.Graphics
+namespace Tetris.Graphics
 {
     public static class Display
     {

@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace DesktopApp.Models
+namespace Tetris.Graphics
 {
     public struct Texel
     {
@@ -16,11 +16,6 @@ namespace DesktopApp.Models
         {
             Position = new Point(x, y);
             Color = color;
-        }
-
-        public Texel Shifted(int x, int y)
-        {
-            return new Texel(Position.X + x, Position.Y + y, Color);
         }
     }
 }

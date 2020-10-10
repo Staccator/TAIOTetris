@@ -5,7 +5,6 @@ using System.IO;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
- using DesktopApp.Graphics;
  using Tetris.Graphics;
 
  namespace Tetris
@@ -18,9 +17,9 @@ using System.Windows.Threading;
             {
                 InitializeComponent();
 
-                int columns = 6;
-                int rows = 8;
-                _grid = Visuals.CreateGrid(columns, rows);
+                int columns = 12;
+                int rows = 12;
+                _grid = DisplayObjects.CreateGrid(columns, rows);
                 UpdatePaintSurfaceSize();
                 Display.SetupBitmap(PaintSurface);
                 CompositionTarget.Rendering += UpdateScene;
@@ -34,15 +33,15 @@ using System.Windows.Threading;
 
         private void UpdatePaintSurfaceSize()
         {
-            PaintSurface.Width = Visuals.PaintSurfaceWidth;
-            PaintSurface.Height = Visuals.PaintSurfaceHeight;
+            PaintSurface.Width = DisplayObjects.PaintSurfaceWidth;
+            PaintSurface.Height = DisplayObjects.PaintSurfaceHeight;
         }
 
         private void UpdateWindowSize()
         {
              int margins = 48;
-             int windowWidth = 300 + margins + Visuals.PaintSurfaceWidth;
-             int windowHeight = margins + 21 + Visuals.PaintSurfaceHeight;
+             int windowWidth = 300 + margins + DisplayObjects.PaintSurfaceWidth;
+             int windowHeight = margins + 21 + DisplayObjects.PaintSurfaceHeight;
              Width = windowWidth;
              Height = windowHeight;
         }

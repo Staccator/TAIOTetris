@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using DesktopApp.Models;
 using Color = System.Drawing.Color;
 
 namespace Tetris.Graphics
 {
-    public static class Visuals
+    public static class DisplayObjects
     {
         private const int LineThickness = 3;
         private const int FieldSize = 50;
 
-        private static int _columns = 8;
+        private static int _columns = 12;
         private static int _rows = 12;
 
         public static int PaintSurfaceWidth => _columns * FieldSize + (_columns + 1) * LineThickness;

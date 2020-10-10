@@ -4,36 +4,33 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows;
-using DesktopApp.Graphics;
-using DesktopApp.Models;
 using Tetris.Graphics;
+using Tetris.Shapes;
 
 namespace Tetris
 {
     public partial class MainWindow
     {
-        private static readonly Random Random = new Random();
         private readonly List<Texel> _grid;
         private int _shapeCount;
         private Stopwatch sw = Stopwatch.StartNew();
 
         private void UpdateScene(object sender, EventArgs e)
         {
-            if (sw.ElapsedMilliseconds < 200) return;
+            if (sw.ElapsedMilliseconds < 1000) return;
             sw.Restart();
             
             _shapeCount = ShapeCount.Value.GetValueOrDefault();
             var buffer = Display.CreateNewBuffer();
-            var displayObjects = new Texel[_shapeCount];
-            for (int i = 0; i < displayObjects.Length; i++)
+            var shapes = new Shape[_shapeCount];
+            for (int i = 0; i < shapes.Length; i++)
             {
-                displayObjects[i] =
-                    new Texel(i, i, Color.FromArgb(Random.Next(255), Random.Next(255), Random.Next(255)));
+                shapes[i] = new Shape(i);
             }
 
-            var texelLists = new List<Texel>[1 + displayObjects.Length];
+            var texelLists = new List<Texel>[1 + shapes.Length];
             texelLists[^1] = _grid;
-            Parallel.For(0, displayObjects.Length, i => { texelLists[i] = Visuals.CreateField(displayObjects[i]); });
+            Parallel.For(0, shapes.Length, i => { texelLists[i] = shapes[i].GetShapeTexels(); });
             Parallel.For(0, texelLists.Length, body: i => { Display.WriteToBitmap(texelLists[i], buffer); });
             Display.CommitDraw(buffer);
         }
