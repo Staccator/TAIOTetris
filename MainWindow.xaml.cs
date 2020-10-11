@@ -1,10 +1,6 @@
 ﻿﻿using System;
- using System.Diagnostics;
-using System.IO;
- using System.Threading;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Threading;
+ using System.Windows;
+ using Tetris.Algorithms;
  using Tetris.Graphics;
 
  namespace Tetris
@@ -13,22 +9,17 @@ using System.Windows.Threading;
     {
         public MainWindow()
         {
-            try
-            {
+            // try
+            // {
                 InitializeComponent();
-
-                int columns = 12;
-                int rows = 12;
-                _grid = DisplayObjects.CreateGrid(columns, rows);
                 UpdatePaintSurfaceSize();
                 Display.SetupBitmap(PaintSurface);
-                CompositionTarget.Rendering += UpdateScene;
                 UpdateWindowSize();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
+            // }
+            // catch (Exception e)
+            // {
+            //     Console.WriteLine(e);
+            // }
         }
 
         private void UpdatePaintSurfaceSize()
@@ -44,6 +35,12 @@ using System.Windows.Threading;
              int windowHeight = margins + 21 + DisplayObjects.PaintSurfaceHeight;
              Width = windowWidth;
              Height = windowHeight;
+        }
+        private void OptimalAlgorithmClick(object sender, RoutedEventArgs e)
+        {
+            int shapeCount = ShapeCount.Value.GetValueOrDefault();
+            var tetrisFitter = new BasicTetrisFitter();
+            DisplayMethods.ExecuteAlgorithm(tetrisFitter, shapeCount);
         }
     }
 }

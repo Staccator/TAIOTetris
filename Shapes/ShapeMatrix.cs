@@ -4,13 +4,13 @@ using System.Drawing;
 
 namespace Tetris.Shapes
 {
-    public class ShapeOnMatrix
+    public class ShapeMatrix
     {
         private const int MaxTypes = 7;
         private readonly int _type;
         private bool[,] _matrix = new bool[4, 4];
 
-        public ShapeOnMatrix(int type)
+        public ShapeMatrix(int type)
         {
             _type = type;
             if (type >= MaxTypes)

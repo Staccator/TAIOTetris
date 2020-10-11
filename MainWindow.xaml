@@ -9,7 +9,7 @@
         Title="Filling tetraminoes into rectangle"
         Width="530"
         Height="500"
-        Topmost="True"
+        Topmost="False"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         Background="#333" >
@@ -41,13 +41,13 @@
             <Grid>
                 <Grid.ColumnDefinitions> <ColumnDefinition Width="3*" /> <ColumnDefinition Width="*" /> </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="Liczba klocków" />
-                <xctk:IntegerUpDown Grid.Column="1" Name="ShapeCount" ValueChanged="ShapeCountChanged" Value="3" Minimum="1"
+                <xctk:IntegerUpDown Grid.Column="1" Name="ShapeCount" Value="3" Minimum="1"
                                     Margin="5" FontSize="25"/>
             </Grid>
             <Button Content="Generuj Klocki"></Button>
             <Grid>
                 <Grid.ColumnDefinitions> <ColumnDefinition/> <ColumnDefinition/> </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Content="Optymalny" />
+                <Button Grid.Column="0" Content="Optymalny" Click="OptimalAlgorithmClick" />
                 <Button Grid.Column="1" Content="Heurystyczny"/>
             </Grid>
         </StackPanel>

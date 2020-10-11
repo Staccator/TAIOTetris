@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Drawing;
 using Color = System.Drawing.Color;
 
 namespace Tetris.Graphics
@@ -15,7 +14,7 @@ namespace Tetris.Graphics
         public static int PaintSurfaceWidth => _columns * FieldSize + (_columns + 1) * LineThickness;
         public static int PaintSurfaceHeight => _rows * FieldSize + (_rows + 1) * LineThickness;
         
-        public static List<Texel> CreateGrid(int columns, int rows)
+        public static List<Texel> Grid(int columns, int rows)
         {
             _columns = columns;
             _rows = rows;
