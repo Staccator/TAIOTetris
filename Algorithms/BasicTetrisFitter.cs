@@ -1,18 +1,13 @@
-﻿using System;
-using System.Drawing;
-using System.Linq;
+﻿using System.Drawing;
 using Tetris.Shapes;
 
 namespace Tetris.Algorithms
 {
     public class BasicTetrisFitter : TetrisFitter
     {
-        private static readonly Random Random = new Random();
-
         public override int[,] Fit(Shape[] shapes)
         {
             var result = CreateEmptyBoard(shapes.Length * 4);
-            var shapesIndexes = shapes.Select(s => s.Index).ToList();
 
             int width = result.GetLength(0);
             int height = result.GetLength(1);
