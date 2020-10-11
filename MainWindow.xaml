@@ -48,7 +48,7 @@
             <Grid>
                 <Grid.ColumnDefinitions> <ColumnDefinition/> <ColumnDefinition/> </Grid.ColumnDefinitions>
                 <Button Grid.Column="0" Content="Optymalny" Click="OptimalAlgorithmClick" />
-                <Button Grid.Column="1" Content="Heurystyczny"/>
+                <Button Grid.Column="1" Content="Heurystyczny" Click="OptimalAlgorithmClick"/>
             </Grid>
         </StackPanel>
 

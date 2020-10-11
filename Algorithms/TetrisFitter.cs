@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using Tetris.Shapes;
 
 namespace Tetris.Algorithms
 {
     public abstract class TetrisFitter
     {
-        private const int EmptyField = -1;
+        public const int EmptyField = -1;
+        
+        public abstract int[,] Fit(Shape[] shapes);
         
         protected int[,] CreateEmptyBoard(int area)
         {
@@ -31,6 +35,23 @@ namespace Tetris.Algorithms
             return result;
         }
 
-        public abstract int[,] Fit(Shape[] shapes);
+        protected List<Point> MatchMatrixOnBoard(int[,] board, ShapeMatrix matrix, Point location)
+        {
+            int width = board.GetLength(0);
+            int height = board.GetLength(1);
+            var boardPositions = matrix.GetBoardPositions(location.X, location.Y);
+
+            var fittingPositions = new List<Point>();
+            foreach (var position in boardPositions)
+            {
+                if (position.X < 0 || position.X >= width || position.Y < 0 || position.Y >= height)
+                    continue;
+
+                if (board[position.X, position.Y] == EmptyField)
+                    fittingPositions.Add(position);
+            }
+
+            return fittingPositions;
+        }
     }
 }

@@ -24,18 +24,5 @@ namespace Tetris.Shapes
                 Random.Next(255),
                 Random.Next(255),
                 Random.Next(255));
-
-        public List<Texel> GetShapeTexels(Point shift = new Point())
-        {
-            shift = new Point(Random.Next(7), Random.Next(5));
-            var result = new List<Texel>();
-            foreach (var point in ShapeMatrix.GetMatrixPositions())
-            {
-                var shiftedPoint = new Point(point.X + shift.X, point.Y + shift.Y);
-                result.AddRange(DisplayObjects.CreateField(new Texel(shiftedPoint, Color)));
-            }
-
-            return result;
-        }
     }
 }

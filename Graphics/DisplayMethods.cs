@@ -17,6 +17,7 @@ namespace Tetris.Graphics
             {
                 shapes[i] = new Shape(i);
                 indexToColor[i] = shapes[i].Color;
+                indexToColor[TetrisFitter.EmptyField] = Color.White;
             }
 
             var fitResult = fitter.Fit(shapes);

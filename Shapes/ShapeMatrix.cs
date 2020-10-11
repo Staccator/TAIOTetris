@@ -101,7 +101,7 @@ namespace Tetris.Shapes
             return result;
         }
 
-        public List<Point> GetMatrixPositions()
+        public List<Point> GetBoardPositions(int shiftX, int shiftY)
         {
             var result = new List<Point>();
             
@@ -110,7 +110,7 @@ namespace Tetris.Shapes
                 for (int j = 0; j < 4; j++)
                 {
                     if (_matrix[i,j])
-                        result.Add(new Point(i, j));
+                        result.Add(new Point(i + shiftX, j + shiftY));
                 }
             }
 
