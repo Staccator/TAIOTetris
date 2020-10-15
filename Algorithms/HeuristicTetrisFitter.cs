@@ -8,12 +8,12 @@ namespace Tetris.Algorithms
     {
         public override int[,] Fit(List<Shape> shapes, int shapeSize)
         {
-            int shapesCount = shapes.Count;
-            var result = CreateEmptyBoard(shapesCount * shapeSize);
+            int shapeCount = shapes.Count;
+            var result = CreateEmptyBoard(shapeCount * shapeSize);
 
             int width = result.GetLength(0);
             int height = result.GetLength(1);
-            for (int k = 0; k < shapesCount; k++)
+            for (int k = 0; k < shapeCount; k++)
             {
                 int bestResultNumber = int.MaxValue;
                 (List<Point> points, Shape shape) bestResult = (null, null);
