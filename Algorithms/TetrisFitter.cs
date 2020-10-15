@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using Tetris.Services;
 using Tetris.Shapes;
 
 namespace Tetris.Algorithms
@@ -9,7 +11,7 @@ namespace Tetris.Algorithms
     {
         public const int EmptyField = -1;
         
-        public abstract int[,] Fit(Shape[] shapes);
+        public abstract int[,] Fit(List<Shape> shapes, int shapeSize);
         
         protected int[,] CreateEmptyBoard(int area)
         {
@@ -35,11 +37,11 @@ namespace Tetris.Algorithms
             return result;
         }
 
-        protected List<Point> MatchShapeOnBoard(int[,] board, ShapeMatrix matrix, Point location)
+        protected List<Point> MatchShapeOnBoard(int[,] board, Point[] shapePoints, Point location)
         {
             int width = board.GetLength(0);
             int height = board.GetLength(1);
-            var boardPositions = matrix.GetBoardPositions(location.X, location.Y);
+            var boardPositions = shapePoints.Select(p => location.Add(p)).ToList();
 
             var fittingPositions = new List<Point>();
             foreach (var position in boardPositions)

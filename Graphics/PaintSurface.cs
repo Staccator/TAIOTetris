@@ -7,49 +7,57 @@ using System.Windows.Media.Imaging;
 
 namespace Tetris.Graphics
 {
-    public static class Display
+    public class PaintSurface
     {
-        public static int Width;
-        public static int Height;
+        private readonly Image _image;
+        private static int _width;
+        private static int _height;
         private static Int32Rect _sourceRect;
         private static WriteableBitmap _wb;
-        
-        public static void SetupBitmap(Image paintSurface)
+
+        public PaintSurface(Image image)
         {
-            Width = (int) paintSurface.Width;
-            Height = (int) paintSurface.Height;
+            _image = image;
+        }
+
+        public void SetupBitmap(int width, int height)
+        {
+            _width = width;
+            _height = height;
             
-            _wb = new WriteableBitmap( Width, Height, 96, 96, PixelFormats.Bgra32, null);
-            _sourceRect = new Int32Rect(0, 0, Width, Height);
+            _wb = new WriteableBitmap( _width, _height, 96, 96, PixelFormats.Bgra32, null);
+            _sourceRect = new Int32Rect(0, 0, _width, _height);
             
-            paintSurface.Source = _wb;
+            _image.Source = _wb;
+            _image.Width = _width;
+            _image.Height = _height;
         }
         
-        public static byte[] CreateNewBuffer()
+        public byte[] CreateNewBuffer()
         {
-            var result =  new byte[Width * Height * (_wb.Format.BitsPerPixel / 8)];
+            var result =  new byte[_width * _height * (_wb.Format.BitsPerPixel / 8)];
             ClearBuffer(result);
             return result;
         }
 
-        private static void ClearBuffer(byte[] buffer)
+        private void ClearBuffer(byte[] buffer)
         {
-            Parallel.For(0, Width * Height * 4, (i) => { buffer[i] = 255; });
+            Parallel.For(0, _width * _height * 4, (i) => { buffer[i] = 255; });
         }
 
-        public static void WriteToBitmap(List<Texel> texels, byte[] buffer)
+        public void WriteToBitmap(List<Texel> texels, byte[] buffer)
         {
             for (var i = 0; i < texels.Count; i++)
             {
                 var texel = texels[i];
                 var x = texel.Position.X;
                 var y = texel.Position.Y;
-                if (x < 0 || x >= Width || y < 0 || y >= Height)
+                if (x < 0 || x >= _width || y < 0 || y >= _height)
                     continue;
 
                 var color = texel.Color;
 
-                var pixelOffset = (x + Width * y) * 4;
+                var pixelOffset = (x + _width * y) * 4;
                 buffer[pixelOffset] = color.B;
                 buffer[pixelOffset + 1] = color.G;
                 buffer[pixelOffset + 2] = color.R;
@@ -57,7 +65,7 @@ namespace Tetris.Graphics
             }
         }
         
-        public static void CommitDraw(byte[] buffer)
+        public void CommitDraw(byte[] buffer)
         {
             var stride = _wb.PixelWidth * (_wb.Format.BitsPerPixel / 8);
             _wb.WritePixels(_sourceRect, buffer, stride, 0);

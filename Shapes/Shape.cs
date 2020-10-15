@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using Tetris.Services;
 
 namespace Tetris.Shapes
 {
@@ -7,13 +8,13 @@ namespace Tetris.Shapes
     {
         private static readonly Random Random = new Random();
         public int Index { get; set; }
-        public ShapeMatrix ShapeMatrix { get; set; }
+        public OneSidedShape OneSidedShape { get; set; }
         public Color Color { get; set; }
 
-        public Shape(int index)
+        public Shape(int index, OneSidedShape oneSidedShape)
         {
             Index = index;
-            ShapeMatrix = new ShapeMatrix(Random.Next(7));
+            OneSidedShape = oneSidedShape;
             Color = GetRandomColor();
         }
 

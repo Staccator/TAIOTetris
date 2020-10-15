@@ -9,24 +9,24 @@ namespace Tetris.Graphics
 {
     public static class DisplayMethods
     {
-        public static void ExecuteAlgorithm(TetrisFitter fitter, Shape[] shapes)
+        public static void ExecuteAlgorithm(TetrisFitter fitter, List<Shape> shapes, PaintSurface resolutionSurface, int shapeSize)
         {
-            
             var indexToColor = shapes.ToDictionary(s => s.Index, s => s.Color);
             indexToColor[TetrisFitter.EmptyField] = Color.White;
 
-            var fitResult = fitter.Fit(shapes);
-            DisplayBoard(fitResult, indexToColor);
+            var fitResult = fitter.Fit(shapes, shapeSize);
+            DisplayBoard(fitResult, indexToColor, resolutionSurface);
         }
         
-        private static void DisplayBoard(int[,] board, Dictionary<int, Color> indexToColor)
+        private static void DisplayBoard(int[,] board, Dictionary<int, Color> indexToColor,
+            PaintSurface resolutionSurface)
         {
             var width = board.GetLength(0);
             var height = board.GetLength(1);
             int boardArea = width * height;
             
             var texelListArray = new List<Texel>[1 + boardArea];
-            var grid = DisplayObjects.Grid(width, height);
+            var grid = DisplayObjects.Grid(width, height, out int paintSurfaceWidth, out int paintSurfaceHeight);
             texelListArray[boardArea] = grid;
             
             Parallel.For(0, boardArea, i =>
@@ -36,23 +36,24 @@ namespace Tetris.Graphics
                 texelListArray[i] = DisplayObjects.CreateField(new Texel(x, y, indexToColor[board[x,y]]));
             });
             
-            var buffer = Display.CreateNewBuffer();
-            Parallel.For(0, texelListArray.Length, body: i => { Display.WriteToBitmap(texelListArray[i], buffer); });
-            Display.CommitDraw(buffer);
+            resolutionSurface.SetupBitmap(paintSurfaceWidth, paintSurfaceHeight);
+            var buffer = resolutionSurface.CreateNewBuffer();
+            Parallel.For(0, texelListArray.Length, body: i => { resolutionSurface.WriteToBitmap(texelListArray[i], buffer); });
+            resolutionSurface.CommitDraw(buffer);
         }
         
-        private static void DisplayShapes(Shape[] shapes)
+        private static void DisplayInputShapes(List<Shape> shapes, PaintSurface inputSurface)
         {
-            var texelListArray = new List<Texel>[shapes.Length];
+            var texelListArray = new List<Texel>[shapes.Count];
             
-            Parallel.For(0, shapes.Length, (int i) =>
+            Parallel.For(0, shapes.Count, (int i) =>
             {
                 texelListArray[i] = DisplayObjects.CreateShapeDisplay(i, shapes[i]);
             });
             
-            var buffer = Display.CreateNewBuffer();
-            Parallel.For(0, texelListArray.Length, body: i => { Display.WriteToBitmap(texelListArray[i], buffer); });
-            Display.CommitDraw(buffer);
+            // var buffer = PaintSurface.CreateNewBuffer();
+            // Parallel.For(0, texelListArray.Length, body: i => { PaintSurface.WriteToBitmap(texelListArray[i], buffer); });
+            // PaintSurface.CommitDraw(buffer);
         }
     }
 }

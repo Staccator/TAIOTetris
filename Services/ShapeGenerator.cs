@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Tetris.Shapes;
 
 namespace Tetris.Services
 {
@@ -14,9 +16,23 @@ namespace Tetris.Services
             new Point(0, 1),
         };
 
-        public static List<OneSidedShape> GenerateShapeMatrices(int maxSize)
+        private static Dictionary<int, List<OneSidedShape>> _oneSidedShapesOfSize =
+            new Dictionary<int, List<OneSidedShape>>();
+
+        public static List<Shape> GenerateShapes(int shapeCount, int shapeSize)
         {
-            maxSize = 3;
+            if (!_oneSidedShapesOfSize.ContainsKey(shapeSize))
+            {
+                _oneSidedShapesOfSize[shapeSize] = GenerateOneSidedShapes(shapeSize);
+            }
+
+            var oneSidedShapes = _oneSidedShapesOfSize[shapeSize];
+            return Enumerable.Range(0, shapeCount)
+                .Select(i => new Shape(i, oneSidedShapes.GetRandomElement())).ToList();
+        }
+
+        public static List<OneSidedShape> GenerateOneSidedShapes(int maxSize)
+        {
             int startSize = 1;
             int lastAddedCellNumber = 1;
             var cellsToCheck = new List<Cell>();
@@ -98,14 +114,15 @@ namespace Tetris.Services
             var newShape = points.Select(p => new Point(p.X - xShift, p.Y))
                 .OrderBy(p => p.X).ThenBy(p => p.Y).ToArray();
 
-            var rotatedPoints = newShape;
+            var rotatedPoints = newShape.ToArray();
             for (int i = 0; i < 3; i++)
             {
                 rotatedPoints = rotatedPoints.Select(p => new Point(p.Y, maxSize - 1 - p.X)).ToArray();
                 var rotatedPointsShiftX = rotatedPoints.Min(p => p.X);
                 var rotatedPointsShiftY = rotatedPoints.Min(p => p.Y);
-                
-                var shapeRotation = rotatedPoints.Select(p => new Point(p.X - rotatedPointsShiftX, p.Y - rotatedPointsShiftY))
+
+                var shapeRotation = rotatedPoints
+                    .Select(p => new Point(p.X - rotatedPointsShiftX, p.Y - rotatedPointsShiftY))
                     .OrderBy(p => p.X).ThenBy(p => p.Y).ToArray();
 
                 foreach (var oneSidedShape in resultShapes)
@@ -119,45 +136,6 @@ namespace Tetris.Services
             }
 
             resultShapes.Add(new OneSidedShape(newShape));
-        }
-    }
-
-    // ReSharper disable PossibleNullReferenceException
-#pragma warning disable 660,661
-    public class OneSidedShape
-#pragma warning restore 660,661
-    {
-        public readonly List<Point[]> Rotations = new List<Point[]>();
-
-        public OneSidedShape(Point[] rotation)
-        {
-            Rotations.Add(rotation);
-        }
-
-        public void Add(Point[] rotation)
-        {
-            Rotations.Add(rotation);
-        }
-
-
-        public static bool operator ==(OneSidedShape left, Point[] right)
-        {
-            var points = left.Rotations.First();
-
-            for (var index = 0; index < points.Length; index++)
-            {
-                var point1 = points[index];
-                var point2 = right[index];
-                if (point1 != point2)
-                    return false;
-            }
-
-            return true;
-        }
-
-        public static bool operator !=(OneSidedShape left, Point[] right)
-        {
-            return !(left == right);
         }
     }
 }

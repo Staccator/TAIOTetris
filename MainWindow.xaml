@@ -6,10 +6,10 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="Filling tetraminoes into rectangle"
-        Width="530"
-        Height="500"
+        Width="1000"
+        Height="800"
         Topmost="False"
-        ResizeMode="NoResize"
+        ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen"
         Background="#333" >
     <Window.Resources>
@@ -39,9 +39,11 @@
         <StackPanel Grid.Column="0" Orientation="Vertical">
             <Grid>
                 <Grid.ColumnDefinitions> <ColumnDefinition Width="3*" /> <ColumnDefinition Width="*" /> </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="Liczba klocków" />
-                <xctk:IntegerUpDown Grid.Column="1" Name="ShapeCount" Value="3" Minimum="1"
-                                    Margin="5" FontSize="25"/>
+                <Grid.RowDefinitions> <RowDefinition/> <RowDefinition/> </Grid.RowDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Content="Liczba klocków" />
+                <xctk:IntegerUpDown Grid.Row="0" Grid.Column="1" Name="ShapeCount" Value="3" Minimum="1" Margin="5" FontSize="25"/>
+                <Label Grid.Row="1" Grid.Column="0" Content="Wielkość klocka" />
+                <xctk:IntegerUpDown Grid.Row="1" Grid.Column="1" Name="ShapeSize" Value="4" Minimum="2" Margin="5" FontSize="25"/>
             </Grid>
             <Button Content="Generuj Klocki"></Button>
             <Grid>
@@ -49,12 +51,17 @@
                 <Button Grid.Column="0" Content="Optymalny" Click="OptimalAlgorithmClick" />
                 <Button Grid.Column="1" Content="Heurystyczny" Click="OptimalAlgorithmClick"/>
             </Grid>
+        <Image Name="InputImage"
+               HorizontalAlignment="Stretch"
+               Width="100"
+               Height="100" />
         </StackPanel>
 
         <Image Grid.Column="1"
-               Name="PaintSurface"
+               Name="ResolutionImage"
                VerticalAlignment="Top"
-               Width="400"
-               Height="720" />
+               HorizontalAlignment="Left"
+               Width="100"
+               Height="100" />
     </Grid>
 </Window>
