@@ -26,33 +26,31 @@ namespace Tetris.Algorithms
                             var fittingPoints = MatchShapeOnBoard(result, rotation, new Point(i, j));
                             if (fittingPoints.Count == shapeSize)
                             {
-                                int resultNumber = j * width + i;
+                                int resultNumber = j * width + i + rotation[0].X;
                                 if (resultNumber < bestResultNumber)
                                 {
                                     bestResultNumber = resultNumber;
                                     bestResult = (fittingPoints, shape);
                                 }
 
-                                goto foundFit;
                             }
+                            // TODO check if its needed // goto foundFit;
                         }
 
-                    foundFit: ;
+                    // foundFit: ;
                 }
 
-                if (bestResult.points != null)
-                {
-                    foreach (var point in bestResult.points)
-                    {
-                        result[point.X, point.Y] = bestResult.shape.Index;
-                    }
-
-                    shapes.Remove(bestResult.shape);
-                }
-                else
+                if (bestResult.points == null)
                 {
                     break;
                 }
+
+                foreach (var point in bestResult.points)
+                {
+                    result[point.X, point.Y] = bestResult.shape.Index;
+                }
+
+                shapes.Remove(bestResult.shape);
             }
 
             return result;

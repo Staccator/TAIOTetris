@@ -111,7 +111,7 @@ namespace Tetris.Services
         {
             int xShift = points.Min(p => p.X);
             var newShape = points.Select(p => new Point(p.X - xShift, p.Y))
-                .OrderBy(p => p.X).ThenBy(p => p.Y).ToArray();
+                .OrderBy(p => p.Y).ThenBy(p => p.X).ToArray();
 
             var rotatedPoints = newShape.ToArray();
             for (int i = 0; i < 3; i++)
@@ -122,7 +122,7 @@ namespace Tetris.Services
 
                 var shapeRotation = rotatedPoints
                     .Select(p => new Point(p.X - rotatedPointsShiftX, p.Y - rotatedPointsShiftY))
-                    .OrderBy(p => p.X).ThenBy(p => p.Y).ToArray();
+                    .OrderBy(p => p.Y).ThenBy(p => p.X).ToArray();
 
                 foreach (var oneSidedShape in resultShapes)
                 {
