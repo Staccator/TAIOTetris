@@ -1,9 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using System.Windows;
- using Tetris.Algorithms;
+using System.Windows.Controls;
+using Tetris.Algorithms;
  using Tetris.Graphics;
 using Tetris.Services;
-using Tetris.Shapes;
 
 namespace Tetris
 {
@@ -14,32 +14,24 @@ namespace Tetris
             InitializeComponent();
             ResolutionSurface = new PaintSurface(ResolutionImage);
             ImageSurface = new PaintSurface(InputImage);
-            // var result = ShapeGenerator.GenerateOneSidedShapes(4);
         }
 
-        public PaintSurface ResolutionSurface { get; }
-        public PaintSurface ImageSurface { get; }
+        private PaintSurface ResolutionSurface { get; }
+        private PaintSurface ImageSurface { get; }
 
-        private void UpdatePaintSurfaceSize()
+        private Dictionary<string, TetrisFitter> _tagToFitter = new Dictionary<string, TetrisFitter>()
         {
-            // ResolutionSurface.Width = DisplayObjects.PaintSurfaceWidth;
-            // ResolutionSurface.Height = DisplayObjects.PaintSurfaceHeight;
-        }
+            {"Basic", new BasicTetrisFitter()},
+            {"Heuristic", new HeuristicTetrisFitter()},
+            {"Optimal", new BasicTetrisFitter()},
+        };
+        private void ExecuteAlgorithmClick(object sender, RoutedEventArgs e)
+        {
+            string tag = (sender as Button)?.Tag.ToString();
+            var tetrisFitter = _tagToFitter[tag!];
 
-        private void UpdateWindowSize()
-        {
-             int margins = 48;
-             // int windowWidth = 300 + margins + DisplayObjects.PaintSurfaceWidth;
-             // int windowHeight = margins + 21 + DisplayObjects.PaintSurfaceHeight;
-             // Width = windowWidth;
-             // Height = windowHeight;
-        }
-        
-        private void OptimalAlgorithmClick(object sender, RoutedEventArgs e)
-        {
             int shapeCount = ShapeCount.Value.GetValueOrDefault();
             int shapeSize = ShapeSize.Value.GetValueOrDefault();
-            var tetrisFitter = new BasicTetrisFitter();
             var shapes = ShapeGenerator.GenerateShapes(shapeCount, shapeSize);
             DisplayMethods.ExecuteAlgorithm(tetrisFitter, shapes, ResolutionSurface, shapeSize);
         }

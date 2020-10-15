@@ -11,50 +11,62 @@
         Topmost="False"
         ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen"
-        Background="#333" >
+        Background="#333">
     <Window.Resources>
         <Style TargetType="Label">
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="FontFamily" Value="David"/>
+            <Setter Property="FontFamily" Value="David" />
             <Setter Property="Foreground" Value="#ccc" />
             <Setter Property="Background" Value="#333" />
-            <Setter Property="FontSize" Value="25"/>
+            <Setter Property="FontSize" Value="25" />
             <Setter Property="BorderBrush" Value="#222" />
             <Setter Property="BorderThickness" Value="5" />
         </Style>
         <Style TargetType="Button">
-            <Setter Property="Height" Value="45"></Setter>
-            <Setter Property="Margin" Value="5,6"></Setter>
+            <Setter Property="Height" Value="45" />
+            <Setter Property="Margin" Value="5,6" />
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="FontFamily" Value="David"/>
-            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontFamily" Value="David" />
+            <Setter Property="FontSize" Value="20" />
         </Style>
     </Window.Resources>
     <Grid Margin="15"
           Background="#222">
-        <Grid.ColumnDefinitions> <ColumnDefinition Width="300" /> <ColumnDefinition Width="4*" /> </Grid.ColumnDefinitions>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300" /> <ColumnDefinition Width="4*" />
+        </Grid.ColumnDefinitions>
+
         <StackPanel Grid.Column="0" Orientation="Vertical">
             <Grid>
-                <Grid.ColumnDefinitions> <ColumnDefinition Width="3*" /> <ColumnDefinition Width="*" /> </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions> <RowDefinition/> <RowDefinition/> </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" /> <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition /> <RowDefinition />
+                </Grid.RowDefinitions>
                 <Label Grid.Row="0" Grid.Column="0" Content="Liczba klocków" />
-                <xctk:IntegerUpDown Grid.Row="0" Grid.Column="1" Name="ShapeCount" Value="3" Minimum="1" Margin="5" FontSize="25"/>
+                <xctk:IntegerUpDown Grid.Row="0" Grid.Column="1" Name="ShapeCount" Value="3" Minimum="1" Margin="5"
+                                    FontSize="25" />
                 <Label Grid.Row="1" Grid.Column="0" Content="Wielkość klocka" />
-                <xctk:IntegerUpDown Grid.Row="1" Grid.Column="1" Name="ShapeSize" Value="4" Minimum="2" Margin="5" FontSize="25"/>
+                <xctk:IntegerUpDown Grid.Row="1" Grid.Column="1" Name="ShapeSize" Value="4" Minimum="2" Margin="5"
+                                    FontSize="25" />
             </Grid>
-            <Button Content="Generuj Klocki"></Button>
+            <Button Content="Generuj Klocki" />
             <Grid>
-                <Grid.ColumnDefinitions> <ColumnDefinition/> <ColumnDefinition/> </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Content="Optymalny" Click="OptimalAlgorithmClick" />
-                <Button Grid.Column="1" Content="Heurystyczny" Click="OptimalAlgorithmClick"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition /> <ColumnDefinition /> <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Content="Bazowy" Tag="Basic" Click="ExecuteAlgorithmClick" />
+                <Button Grid.Column="1" Content="Heurystyczny" Tag="Heuristic" Click="ExecuteAlgorithmClick" />
+                <Button Grid.Column="2" Content="Optymalny" Tag="Optimal" IsEnabled="False"
+                        Click="ExecuteAlgorithmClick" />
             </Grid>
-        <Image Name="InputImage"
-               HorizontalAlignment="Stretch"
-               Width="100"
-               Height="100" />
+            <Image Name="InputImage"
+                   HorizontalAlignment="Stretch"
+                   Width="100"
+                   Height="100" />
         </StackPanel>
 
         <Image Grid.Column="1"
