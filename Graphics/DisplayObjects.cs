@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Tetris.Shapes;
 using Color = System.Drawing.Color;
 
 namespace Tetris.Graphics
@@ -50,6 +51,12 @@ namespace Tetris.Graphics
                 result.Add(new Texel(xShift + i, yShift + j, texel.Color));
             
             return result;
+        }
+
+        public static List<Texel> CreateShapeDisplay(int i, Shape shape)
+        {
+            int yShift = 2 * FieldSize * i;
+            throw new System.NotImplementedException();
         }
     }
 }

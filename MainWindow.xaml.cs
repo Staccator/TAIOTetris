@@ -1,24 +1,19 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
  using Tetris.Algorithms;
  using Tetris.Graphics;
+using Tetris.Shapes;
 
- namespace Tetris
+namespace Tetris
 {
     public partial class MainWindow
     {
         public MainWindow()
         {
-            // try
-            // {
-                InitializeComponent();
-                UpdatePaintSurfaceSize();
-                Display.SetupBitmap(PaintSurface);
-                UpdateWindowSize();
-            // }
-            // catch (Exception e)
-            // {
-            //     Console.WriteLine(e);
-            // }
+            InitializeComponent();
+            UpdatePaintSurfaceSize();
+            Display.SetupBitmap(PaintSurface);
+            UpdateWindowSize();
         }
 
         private void UpdatePaintSurfaceSize()
@@ -39,7 +34,8 @@
         {
             int shapeCount = ShapeCount.Value.GetValueOrDefault();
             var tetrisFitter = new BasicTetrisFitter();
-            DisplayMethods.ExecuteAlgorithm(tetrisFitter, shapeCount);
+            var shapes = Enumerable.Range(0, shapeCount).Select(i => new Shape(i)).ToArray();
+            DisplayMethods.ExecuteAlgorithm(tetrisFitter, shapes);
         }
     }
 }

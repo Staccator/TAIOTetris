@@ -35,7 +35,7 @@ namespace Tetris.Algorithms
             return result;
         }
 
-        protected List<Point> MatchMatrixOnBoard(int[,] board, ShapeMatrix matrix, Point location)
+        protected List<Point> MatchShapeOnBoard(int[,] board, ShapeMatrix matrix, Point location)
         {
             int width = board.GetLength(0);
             int height = board.GetLength(1);

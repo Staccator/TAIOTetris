@@ -18,7 +18,7 @@ namespace Tetris.Algorithms
                 for (int k = 0; k < 4; k++)
                 {
                     shape.ShapeMatrix.RotateRight();
-                    var fittingPoints = MatchMatrixOnBoard(result, shape.ShapeMatrix, new Point(i, j));
+                    var fittingPoints = MatchShapeOnBoard(result, shape.ShapeMatrix, new Point(i, j));
                     if (fittingPoints.Count == 4)
                     {
                         foreach (var fittingPoint in fittingPoints)
