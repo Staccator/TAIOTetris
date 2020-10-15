@@ -2,6 +2,7 @@
 using System.Windows;
  using Tetris.Algorithms;
  using Tetris.Graphics;
+using Tetris.Services;
 using Tetris.Shapes;
 
 namespace Tetris
@@ -14,6 +15,10 @@ namespace Tetris
             UpdatePaintSurfaceSize();
             Display.SetupBitmap(PaintSurface);
             UpdateWindowSize();
+
+            var result = Enumerable.Range(1, 8).Select(i =>
+                (i, ShapeGenerator.GenerateShapeMatrices(i).Count)).ToList();
+            // ShapeGenerator.GenerateShapeMatrices(2);
         }
 
         private void UpdatePaintSurfaceSize()
