@@ -66,12 +66,10 @@
                         <Grid.RowDefinitions>
                             <RowDefinition /> <RowDefinition />
                         </Grid.RowDefinitions>
-                        <Button Grid.Row="0" Grid.Column="0" Content="Bazowy" Tag="0" Click="ExecuteAlgorithmClick" />
-                        <Button Grid.Row="0" Grid.Column="1" Content="Heurystyczny" Tag="1"
-                                Click="ExecuteAlgorithmClick" />
-                        <Button Grid.Row="1" Grid.Column="0" Content="Testowy" Tag="2" Click="ExecuteAlgorithmClick" />
-                        <Button Grid.Row="1" Grid.Column="1" Content="Optymalny" Tag="3" Click="ExecuteAlgorithmClick"
-                                IsEnabled="False" />
+                        <Button Grid.Row="0" Grid.Column="0" Name="Button1" Content="Bazowy" Tag="0" Click="ExecuteAlgorithmClick" IsEnabled="False"/>
+                        <Button Grid.Row="0" Grid.Column="1" Name="Button2" Content="Heurystyczny" Tag="1" Click="ExecuteAlgorithmClick" IsEnabled="False"/>
+                        <Button Grid.Row="1" Grid.Column="0" Name="Button3" Content="Testowy" Tag="2" Click="ExecuteAlgorithmClick" IsEnabled="False"/>
+                        <Button Grid.Row="1" Grid.Column="1" Name="Button4" Content="Optymalny" Tag="3" Click="ExecuteAlgorithmClick" IsEnabled="False" />
                     </Grid>
                     <Image Name="InputImage"
                            Width="280"

@@ -35,7 +35,7 @@ namespace Tetris
 
         private async void ExecuteAlgorithmClick(object sender, RoutedEventArgs e)
         {
-            // ShowOverlay();
+            ShowOverlay();
             Stopwatch sw = Stopwatch.StartNew();
 
             int tag = int.Parse((sender as Button)?.Tag.ToString()!);
@@ -48,7 +48,7 @@ namespace Tetris
             DisplayMethods.DisplayBoard(fitResult, indexToColor, ResolutionSurface);
 
             Console.WriteLine($"Time executing: {sw.ElapsedMilliseconds}ms.");
-            // HideOverlay();
+            HideOverlay();
         }
 
         private async void GenerateShapesClick(object sender, RoutedEventArgs e)
@@ -63,7 +63,15 @@ namespace Tetris
             ResolutionSurface.Clear();
             DisplayMethods.DisplayInputShapes(shapeSize, shapes, InputSurface);
 
+            EnableButtons();
             HideOverlay();
+        }
+
+        private void EnableButtons()
+        {
+            Button1.IsEnabled = true;
+            Button2.IsEnabled = true;
+            Button3.IsEnabled = true;
         }
 
         private void HideOverlay()

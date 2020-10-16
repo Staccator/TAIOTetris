@@ -32,12 +32,8 @@ namespace Tetris.Algorithms
                                     bestResultNumber = resultNumber;
                                     bestResult = (fittingPoints, shape);
                                 }
-
                             }
-                            // TODO check if its needed // goto foundFit;
                         }
-
-                    // foundFit: ;
                 }
 
                 if (bestResult.points == null)
