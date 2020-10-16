@@ -2,23 +2,13 @@
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
-using Tetris.Algorithms;
 using Tetris.Shapes;
 
 namespace Tetris.Graphics
 {
     public static class DisplayMethods
     {
-        public static void ExecuteAlgorithm(TetrisFitter fitter, List<Shape> shapes, PaintSurface resolutionSurface, int shapeSize)
-        {
-            var indexToColor = shapes.ToDictionary(s => s.Index, s => s.Color);
-            indexToColor[TetrisFitter.EmptyField] = Color.White;
-
-            var fitResult = fitter.Fit(shapes.ToList(), shapeSize);
-            DisplayBoard(fitResult, indexToColor, resolutionSurface);
-        }
-        
-        private static void DisplayBoard(int[,] board, Dictionary<int, Color> indexToColor,
+        public static void DisplayBoard(int[,] board, Dictionary<int, Color> indexToColor,
             PaintSurface resolutionSurface)
         {
             var width = board.GetLength(0);

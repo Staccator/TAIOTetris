@@ -69,7 +69,7 @@ namespace Tetris.Graphics
                 aggregatedShapesHeight += shapeHeights[i];
                 for (int k = 0; k < paintSurfaceWidth; k++)
                 for (int j = 0; j < SplittingLineThickness; j++)
-                    result.Add(new Texel(k, aggregatedShapesHeight * fieldSize + SplittingLineThickness * i + j, Color.Black));
+                    result.Add(new Texel(k, aggregatedShapesHeight * fieldSize + SplittingLineThickness * i + j, Color.White));
             }
 
             return result;

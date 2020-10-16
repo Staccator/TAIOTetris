@@ -27,18 +27,21 @@ namespace Tetris.Graphics
         {
             _width = width;
             _height = height;
-            
-            _wb = new WriteableBitmap( Width, _height, 96, 96, PixelFormats.Bgra32, null);
+
+            _wb = new WriteableBitmap(Width, _height, 96, 96, PixelFormats.Bgra32, null);
             _sourceRect = new Int32Rect(0, 0, Width, _height);
-            
-            _image.Source = _wb;
-            _image.Width = Width;
-            _image.Height = _height;
+
+            _image.Dispatcher.Invoke(() =>
+            {
+                _image.Source = _wb;
+                _image.Width = Width;
+                _image.Height = _height;
+            });
         }
-        
+
         public byte[] CreateNewBuffer()
         {
-            var result =  new byte[Width * _height * (_wb.Format.BitsPerPixel / 8)];
+            var result = new byte[Width * _height * (_wb.Format.BitsPerPixel / 8)];
             ClearBuffer(result);
             return result;
         }
@@ -67,11 +70,18 @@ namespace Tetris.Graphics
                 buffer[pixelOffset + 3] = color.A;
             }
         }
-        
+
         public void CommitDraw(byte[] buffer)
         {
             var stride = _wb.PixelWidth * (_wb.Format.BitsPerPixel / 8);
             _wb.WritePixels(_sourceRect, buffer, stride, 0);
+        }
+
+        public void Clear()
+        {
+            SetupBitmap(1, 1);
+            var buffer = CreateNewBuffer();
+            CommitDraw(buffer);
         }
     }
 }

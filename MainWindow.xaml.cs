@@ -1,8 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Tetris.Algorithms;
- using Tetris.Graphics;
+using Tetris.Graphics;
 using Tetris.Services;
 using Tetris.Shapes;
 
@@ -24,24 +29,53 @@ namespace Tetris
         {
             {0, new BasicTetrisFitter()},
             {1, new HeuristicTetrisFitter()},
-            {2, new BasicTetrisFitter()},
+            {2, new TestTetrisFitter()},
             {3, new BasicTetrisFitter()},
         };
-        private void ExecuteAlgorithmClick(object sender, RoutedEventArgs e)
+
+        private async void ExecuteAlgorithmClick(object sender, RoutedEventArgs e)
         {
+            // ShowOverlay();
+            Stopwatch sw = Stopwatch.StartNew();
+
             int tag = int.Parse((sender as Button)?.Tag.ToString()!);
             var tetrisFitter = _tagToFitter[tag];
+            var shapes = _generatedShapes.shapes;
+            var indexToColor = shapes.ToDictionary(s => s.Index, s => s.Color);
+            indexToColor[TetrisFitter.EmptyField] = Color.White;
 
-            DisplayMethods.ExecuteAlgorithm(tetrisFitter, _generatedShapes.shapes, ResolutionSurface, _generatedShapes.shapeSize);
+            var fitResult = await Task.Run(() => tetrisFitter.Fit(shapes.ToList(), _generatedShapes.shapeSize));
+            DisplayMethods.DisplayBoard(fitResult, indexToColor, ResolutionSurface);
+
+            Console.WriteLine($"Time executing: {sw.ElapsedMilliseconds}ms.");
+            // HideOverlay();
         }
 
-        private void GenerateShapesClick(object sender, RoutedEventArgs e)
+        private async void GenerateShapesClick(object sender, RoutedEventArgs e)
         {
+            ShowOverlay();
+
             int shapeCount = ShapeCount.Value.GetValueOrDefault();
             int shapeSize = ShapeSize.Value.GetValueOrDefault();
-            var shapes = ShapeGenerator.GenerateShapes(shapeCount, shapeSize);
+
+            var shapes = await Task.Run(() => ShapeGenerator.GenerateShapes(shapeCount, shapeSize));
             _generatedShapes = (shapes, shapeSize);
+            ResolutionSurface.Clear();
             DisplayMethods.DisplayInputShapes(shapeSize, shapes, InputSurface);
+
+            HideOverlay();
+        }
+
+        private void HideOverlay()
+        {
+            Overlay.Visibility = Visibility.Hidden;
+            MainDisplay.IsEnabled = true;
+        }
+
+        private void ShowOverlay()
+        {
+            Overlay.Visibility = Visibility.Visible;
+            MainDisplay.IsEnabled = false;
         }
 
         private (List<Shape> shapes, int shapeSize) _generatedShapes;
