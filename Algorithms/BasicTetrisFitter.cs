@@ -14,9 +14,9 @@ namespace Tetris.Algorithms
             int height = result.GetLength(1);
             foreach (var shape in shapes)
             {
-                for (int i = 0; i < width; i++)
                 for (int j = 0; j < height; j++)
-                    foreach (var rotation in shape.OneSidedShape.Rotations)
+                for (int i = 0; i < width; i++)
+                    foreach (var rotation in shape.OneSidedShape.FixedShapes)
                     {
                         var fittingPoints = MatchShapeOnBoard(result, rotation, new Point(i, j));
                         if (fittingPoints.Count == shapeSize)

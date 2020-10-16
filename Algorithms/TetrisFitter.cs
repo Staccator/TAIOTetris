@@ -37,8 +37,9 @@ namespace Tetris.Algorithms
             return result;
         }
 
-        protected List<Point> MatchShapeOnBoard(int[,] board, Point[] shapePoints, Point location)
+        protected List<Point> MatchShapeOnBoard(int[,] board, FixedShape shape, Point location)
         {
+            var shapePoints = shape.Points;
             int width = board.GetLength(0);
             int height = board.GetLength(1);
             var boardPositions = shapePoints.Select(p => location.Add(p)).ToList();

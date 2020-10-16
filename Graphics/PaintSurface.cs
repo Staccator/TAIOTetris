@@ -10,39 +10,42 @@ namespace Tetris.Graphics
     public class PaintSurface
     {
         private readonly Image _image;
-        private static int _width;
-        private static int _height;
-        private static Int32Rect _sourceRect;
-        private static WriteableBitmap _wb;
+        private int _width;
+        private int _height;
+        private Int32Rect _sourceRect;
+        private WriteableBitmap _wb;
 
         public PaintSurface(Image image)
         {
             _image = image;
+            _width = (int) image.Width;
         }
+
+        public int Width => _width;
 
         public void SetupBitmap(int width, int height)
         {
             _width = width;
             _height = height;
             
-            _wb = new WriteableBitmap( _width, _height, 96, 96, PixelFormats.Bgra32, null);
-            _sourceRect = new Int32Rect(0, 0, _width, _height);
+            _wb = new WriteableBitmap( Width, _height, 96, 96, PixelFormats.Bgra32, null);
+            _sourceRect = new Int32Rect(0, 0, Width, _height);
             
             _image.Source = _wb;
-            _image.Width = _width;
+            _image.Width = Width;
             _image.Height = _height;
         }
         
         public byte[] CreateNewBuffer()
         {
-            var result =  new byte[_width * _height * (_wb.Format.BitsPerPixel / 8)];
+            var result =  new byte[Width * _height * (_wb.Format.BitsPerPixel / 8)];
             ClearBuffer(result);
             return result;
         }
 
         private void ClearBuffer(byte[] buffer)
         {
-            Parallel.For(0, _width * _height * 4, (i) => { buffer[i] = 255; });
+            Parallel.For(0, Width * _height * 4, (i) => { buffer[i] = 255; });
         }
 
         public void WriteToBitmap(List<Texel> texels, byte[] buffer)
@@ -52,12 +55,12 @@ namespace Tetris.Graphics
                 var texel = texels[i];
                 var x = texel.Position.X;
                 var y = texel.Position.Y;
-                if (x < 0 || x >= _width || y < 0 || y >= _height)
+                if (x < 0 || x >= Width || y < 0 || y >= _height)
                     continue;
 
                 var color = texel.Color;
 
-                var pixelOffset = (x + _width * y) * 4;
+                var pixelOffset = (x + Width * y) * 4;
                 buffer[pixelOffset] = color.B;
                 buffer[pixelOffset + 1] = color.G;
                 buffer[pixelOffset + 2] = color.R;

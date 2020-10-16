@@ -21,12 +21,12 @@ namespace Tetris.Algorithms
                 {
                     for (int j = 0; j < height; j++)
                     for (int i = 0; i < width; i++)
-                        foreach (var rotation in shape.OneSidedShape.Rotations)
+                        foreach (var rotation in shape.OneSidedShape.FixedShapes)
                         {
                             var fittingPoints = MatchShapeOnBoard(result, rotation, new Point(i, j));
                             if (fittingPoints.Count == shapeSize)
                             {
-                                int resultNumber = j * width + i + rotation[0].X;
+                                int resultNumber = j * width + i + rotation.Points[0].X;
                                 if (resultNumber < bestResultNumber)
                                 {
                                     bestResultNumber = resultNumber;

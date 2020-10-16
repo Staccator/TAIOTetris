@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using Tetris.Algorithms;
  using Tetris.Graphics;
 using Tetris.Services;
+using Tetris.Shapes;
 
 namespace Tetris
 {
@@ -13,27 +14,36 @@ namespace Tetris
         {
             InitializeComponent();
             ResolutionSurface = new PaintSurface(ResolutionImage);
-            ImageSurface = new PaintSurface(InputImage);
+            InputSurface = new PaintSurface(InputImage);
         }
 
         private PaintSurface ResolutionSurface { get; }
-        private PaintSurface ImageSurface { get; }
+        private PaintSurface InputSurface { get; }
 
-        private Dictionary<string, TetrisFitter> _tagToFitter = new Dictionary<string, TetrisFitter>()
+        private Dictionary<int, TetrisFitter> _tagToFitter = new Dictionary<int, TetrisFitter>()
         {
-            {"Basic", new BasicTetrisFitter()},
-            {"Heuristic", new HeuristicTetrisFitter()},
-            {"Optimal", new BasicTetrisFitter()},
+            {0, new BasicTetrisFitter()},
+            {1, new HeuristicTetrisFitter()},
+            {2, new BasicTetrisFitter()},
+            {3, new BasicTetrisFitter()},
         };
         private void ExecuteAlgorithmClick(object sender, RoutedEventArgs e)
         {
-            string tag = (sender as Button)?.Tag.ToString();
-            var tetrisFitter = _tagToFitter[tag!];
+            int tag = int.Parse((sender as Button)?.Tag.ToString()!);
+            var tetrisFitter = _tagToFitter[tag];
 
+            DisplayMethods.ExecuteAlgorithm(tetrisFitter, _generatedShapes.shapes, ResolutionSurface, _generatedShapes.shapeSize);
+        }
+
+        private void GenerateShapesClick(object sender, RoutedEventArgs e)
+        {
             int shapeCount = ShapeCount.Value.GetValueOrDefault();
             int shapeSize = ShapeSize.Value.GetValueOrDefault();
             var shapes = ShapeGenerator.GenerateShapes(shapeCount, shapeSize);
-            DisplayMethods.ExecuteAlgorithm(tetrisFitter, shapes, ResolutionSurface, shapeSize);
+            _generatedShapes = (shapes, shapeSize);
+            DisplayMethods.DisplayInputShapes(shapeSize, shapes, InputSurface);
         }
+
+        private (List<Shape> shapes, int shapeSize) _generatedShapes;
     }
 }

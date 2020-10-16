@@ -14,7 +14,7 @@ namespace Tetris.Graphics
             var indexToColor = shapes.ToDictionary(s => s.Index, s => s.Color);
             indexToColor[TetrisFitter.EmptyField] = Color.White;
 
-            var fitResult = fitter.Fit(shapes, shapeSize);
+            var fitResult = fitter.Fit(shapes.ToList(), shapeSize);
             DisplayBoard(fitResult, indexToColor, resolutionSurface);
         }
         
@@ -33,7 +33,7 @@ namespace Tetris.Graphics
             {
                 int x = i % width;
                 int y = i / width;
-                texelListArray[i] = DisplayObjects.CreateField(new Texel(x, y, indexToColor[board[x,y]]));
+                texelListArray[i] = DisplayObjects.FieldDisplay(new Texel(x, y, indexToColor[board[x,y]]));
             });
             
             resolutionSurface.SetupBitmap(paintSurfaceWidth, paintSurfaceHeight);
@@ -41,19 +41,26 @@ namespace Tetris.Graphics
             Parallel.For(0, texelListArray.Length, body: i => { resolutionSurface.WriteToBitmap(texelListArray[i], buffer); });
             resolutionSurface.CommitDraw(buffer);
         }
-        
-        private static void DisplayInputShapes(List<Shape> shapes, PaintSurface inputSurface)
+
+        public static void DisplayInputShapes(int shapeSize, List<Shape> shapes, PaintSurface inputSurface)
         {
-            var texelListArray = new List<Texel>[shapes.Count];
+            int shapeCount = shapes.Count;
+            var texelListArray = new List<Texel>[1 + shapeCount];
+
+            var fixedShapes = shapes.Select(s => s.OneSidedShape.ShortestFixedShape).ToList();
+            var fixedShapeHeights = fixedShapes.Select(f => f.Height).ToList();
+            var frame = DisplayObjects.ShapesFrame(280, shapeSize, fixedShapeHeights, out int paintSurfaceWidth, out int paintSurfaceHeight, out int fieldSize);
+            texelListArray[shapeCount] = frame;
             
-            Parallel.For(0, shapes.Count, (int i) =>
+            Parallel.For(0, fixedShapes.Count, i =>
             {
-                texelListArray[i] = DisplayObjects.CreateShapeDisplay(i, shapes[i]);
+                texelListArray[i] = DisplayObjects.ShapeDisplay(i, fieldSize, shapes[i].Color, fixedShapes[i], fixedShapeHeights);
             });
             
-            // var buffer = PaintSurface.CreateNewBuffer();
-            // Parallel.For(0, texelListArray.Length, body: i => { PaintSurface.WriteToBitmap(texelListArray[i], buffer); });
-            // PaintSurface.CommitDraw(buffer);
+            inputSurface.SetupBitmap(paintSurfaceWidth, paintSurfaceHeight);
+            var buffer = inputSurface.CreateNewBuffer();
+            Parallel.For(0, texelListArray.Length, body: i => { inputSurface.WriteToBitmap(texelListArray[i], buffer); });
+            inputSurface.CommitDraw(buffer);
         }
     }
 }

@@ -9,26 +9,28 @@ namespace Tetris.Services
     public class OneSidedShape
 #pragma warning restore 660,661
     {
-        public readonly List<Point[]> Rotations = new List<Point[]>();
+        public readonly List<FixedShape> FixedShapes = new List<FixedShape>();
+
+        public FixedShape ShortestFixedShape => FixedShapes.OrderBy(f => f.Height).First();
 
         public OneSidedShape(Point[] rotation)
         {
-            Rotations.Add(rotation);
+            FixedShapes.Add(new FixedShape(rotation));
         }
 
         public void Add(Point[] rotation)
         {
-            Rotations.Add(rotation);
+            FixedShapes.Add(new FixedShape(rotation));
         }
-
 
         public static bool operator ==(OneSidedShape left, Point[] right)
         {
-            var points = left.Rotations.First();
+            var firstFixedShape = left.FixedShapes.First();
 
-            for (var index = 0; index < points.Length; index++)
+            var firstFixedShapePoints = firstFixedShape.Points;
+            for (var index = 0; index < firstFixedShapePoints.Length; index++)
             {
-                var point1 = points[index];
+                var point1 = firstFixedShapePoints[index];
                 var point2 = right[index];
                 if (point1 != point2)
                     return false;
