@@ -16,7 +16,7 @@ namespace Tetris.Graphics
             int boardArea = width * height;
             
             var texelListArray = new List<Texel>[1 + boardArea];
-            var grid = DisplayObjects.Grid(width, height, out int paintSurfaceWidth, out int paintSurfaceHeight);
+            var grid = DisplayObjects.Grid(width, height, board, indexToColor, out int paintSurfaceWidth, out int paintSurfaceHeight);
             texelListArray[boardArea] = grid;
             
             Parallel.For(0, boardArea, i =>

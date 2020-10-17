@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Tetris.Services;
+using Xceed.Wpf.Toolkit;
 using Color = System.Drawing.Color;
 
 namespace Tetris.Graphics
 {
     public static class DisplayObjects
     {
-        private const int LineThickness = 3;
+        private const int LineThickness = 2;
         private const int SplittingLineThickness = 10;
         private const int ResolutionFieldSize = 40;
 
@@ -17,22 +18,56 @@ namespace Tetris.Graphics
 
         private static int PaintSurfaceHeight(int rows) => rows * ResolutionFieldSize + (rows + 1) * LineThickness;
 
-        public static List<Texel> Grid(int columns, int rows, out int paintSurfaceWidth, out int paintSurfaceHeight)
+        private static int BitmapToBoardIndex(int idx) => (idx - LineThickness) / (ResolutionFieldSize + LineThickness);
+
+        public static List<Texel> Grid(int columns, int rows, int[,] board, Dictionary<int, Color> indexToColor, out int paintSurfaceWidth, out int paintSurfaceHeight)
         {
+            const int translation = LineThickness + ResolutionFieldSize;
             List<Texel> grid = new List<Texel>();
             paintSurfaceWidth = PaintSurfaceWidth(columns);
             paintSurfaceHeight = PaintSurfaceHeight(rows);
             var gridColor = Color.Black;
 
             for (int i = 0; i < columns + 1; i++)
-            for (int j = 0; j < paintSurfaceHeight; j++)
-            for (int k = 0; k < LineThickness; k++)
-                grid.Add(new Texel(i * (LineThickness + ResolutionFieldSize) + k, j, gridColor));
+                for (int j = 0; j < paintSurfaceHeight; j++)
+                {
+                    int row = BitmapToBoardIndex(j);
+                    if (i > 0 && i < columns && indexToColor[board[i, row]] == indexToColor[board[i - 1, row]])
+                        gridColor = indexToColor[board[i, row]];
+                    for (int k = 0; k < LineThickness; k++)
+                        grid.Add(new Texel(i * translation + k, j, gridColor));
+
+                    gridColor = Color.Black;
+                }
 
             for (int i = 0; i < rows + 1; i++)
-            for (int j = 0; j < paintSurfaceWidth; j++)
-            for (int k = 0; k < LineThickness; k++)
-                grid.Add(new Texel(j, i * (LineThickness + ResolutionFieldSize) + k, gridColor));
+                for (int j = 0; j < paintSurfaceWidth; j++)
+                {
+                    int column = BitmapToBoardIndex(j);
+                    if (i > 0 && i < rows && indexToColor[board[column, i]] == indexToColor[board[column, i - 1]])
+                        gridColor = indexToColor[board[column, i]];
+
+                    for (int k = 0; k < LineThickness; k++)
+                        grid.Add(new Texel(j, i * translation + k, gridColor));
+
+                    gridColor = Color.Black;
+                }
+
+            for(int i=0; i<rows+1; i++)
+                for(int j=0; j<columns+1; j++)
+                {
+                    //It looks poor, but I dont know better way to write it. At least it has cool name.
+                    bool paintItBlack = i == 0 || j == 0 || i == rows || j == columns ||
+                                        indexToColor[board[j, i - 1]] != indexToColor[board[j, i]] ||
+                                        indexToColor[board[j, i]] != indexToColor[board[j - 1, i]] ||
+                                        indexToColor[board[j - 1, i]] != indexToColor[board[j - 1, i - 1]] ||
+                                        indexToColor[board[j - 1, i - 1]] != indexToColor[board[j, i - 1]];
+                    if(paintItBlack)
+                        for (int k = 0; k < LineThickness; k++)
+                            for (int l = 0; l < LineThickness; l++)
+                                grid.Add(new Texel(j * translation + l, i * translation + k, gridColor)); 
+
+                }
 
             return grid;
         }
