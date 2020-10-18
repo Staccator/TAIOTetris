@@ -33,14 +33,18 @@ namespace Tetris.Services
                     .Select(p => new Point(p.X - rotatedPointsShiftX, p.Y - rotatedPointsShiftY))
                     .OrderBy(p => p.Y).ThenBy(p => p.X).ToArray();
 
+                bool newShapeAdded = false;
                 for (var index = 0; index < firstShape.Length; index++)
                 {
                     if (firstShape[index] != shapeRotation[index])
                     {
                         result.Add(shapeRotation);
+                        newShapeAdded = true;
                         break;
                     }
                 }
+
+                if (!newShapeAdded) break;
             }
 
             return result;

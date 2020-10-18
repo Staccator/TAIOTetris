@@ -10,6 +10,7 @@ using Tetris.Algorithms;
 using Tetris.Graphics;
 using Tetris.Services;
 using Tetris.Shapes;
+using Point = System.Drawing.Point;
 
 namespace Tetris
 {
@@ -62,8 +63,6 @@ namespace Tetris
             _generatedShapes = (shapes, shapeSize);
             ResolutionSurface.Clear();
             DisplayMethods.DisplayInputShapes(shapeSize, shapes, InputSurface);
-
-            // shapes[0].GenerateCuts();
 
             EnableButtons();
             HideOverlay();
