@@ -44,7 +44,7 @@ namespace Tetris
             var indexToColor = shapes.ToDictionary(s => s.Index, s => s.Color);
             indexToColor[TetrisFitter.EmptyField] = Color.White;
 
-            var fitResult = await Task.Run(() => tetrisFitter.Fit(shapes.ToList(), _generatedShapes.shapeSize));
+            var fitResult = await Task.Run(() => tetrisFitter.Fit(shapes.ToList()));
             DisplayMethods.DisplayBoard(fitResult, indexToColor, ResolutionSurface);
 
             Console.WriteLine($"Time executing: {sw.ElapsedMilliseconds}ms.");
@@ -63,7 +63,7 @@ namespace Tetris
             ResolutionSurface.Clear();
             DisplayMethods.DisplayInputShapes(shapeSize, shapes, InputSurface);
 
-            shapes[0].OneSidedShape.GenerateCuts(shapeSize);
+            // shapes[0].GenerateCuts();
 
             EnableButtons();
             HideOverlay();

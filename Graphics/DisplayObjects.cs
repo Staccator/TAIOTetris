@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Tetris.Services;
-using Xceed.Wpf.Toolkit;
 using Color = System.Drawing.Color;
 
 namespace Tetris.Graphics

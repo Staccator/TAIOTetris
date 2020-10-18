@@ -1,13 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using Tetris.Shapes;
 
 namespace Tetris.Algorithms
 {
     public class HeuristicTetrisFitter : TetrisFitter
     {
-        public override int[,] Fit(List<Shape> shapes, int shapeSize)
+        public override int[,] Fit(List<Shape> shapes)
         {
+            int shapeSize = shapes.First().Size;
             int shapeCount = shapes.Count;
             var result = CreateEmptyBoard(shapeCount * shapeSize);
 

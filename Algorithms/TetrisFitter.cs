@@ -11,7 +11,7 @@ namespace Tetris.Algorithms
     {
         public const int EmptyField = -1;
         
-        public abstract int[,] Fit(List<Shape> shapes, int shapeSize);
+        public abstract int[,] Fit(List<Shape> shapes);
         
         protected int[,] CreateEmptyBoard(int area)
         {

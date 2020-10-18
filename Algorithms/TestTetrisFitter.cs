@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using Tetris.Shapes;
 
 namespace Tetris.Algorithms
 {
     public class TestTetrisFitter : TetrisFitter
     {
-        public override int[,] Fit(List<Shape> shapes, int shapeSize)
+        public override int[,] Fit(List<Shape> shapes)
         {
             int shapeCount = shapes.Count;
-            var result = CreateEmptyBoard(shapeCount * shapeSize);
+            var result = CreateEmptyBoard(shapeCount * shapes.First().Size);
 
             int width = result.GetLength(0);
             int height = result.GetLength(1);
-            for (int k = 0; k < shapeCount; k++)
+            while (shapes.Any())
             {
                 int bestResultNumber = int.MaxValue;
                 (List<Point> points, Shape shape) bestResult = (null, null);
@@ -26,7 +27,7 @@ namespace Tetris.Algorithms
                         foreach (var rotation in shape.OneSidedShape.FixedShapes)
                         {
                             var fittingPoints = MatchShapeOnBoard(result, rotation, new Point(i, j));
-                            if (fittingPoints.Count == shapeSize)
+                            if (fittingPoints.Count == shape.Size)
                             {
                                 foundFit = true;
                                 int resultNumber = j * width + i + rotation.Points[0].X;
@@ -46,7 +47,12 @@ namespace Tetris.Algorithms
 
                 if (bestResult.points == null)
                 {
-                    break;
+                    var firstNotTrivialShape = shapes.First(s => s.Size > 1);
+                    shapes.RemoveAt(0);
+                    var split = firstNotTrivialShape.SplitIntoTwoRandomShapes();
+                    shapes.Add(split.Item1);
+                    shapes.Add(split.Item2);
+                    continue;
                 }
 
                 foreach (var point in bestResult.points)

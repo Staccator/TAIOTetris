@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Threading;
 using Tetris.Shapes;
 
 namespace Tetris.Services
@@ -28,7 +27,7 @@ namespace Tetris.Services
 
             var oneSidedShapes = _oneSidedShapesOfSize[shapeSize];
             return Enumerable.Range(0, shapeCount)
-                .Select(i => new Shape(i, oneSidedShapes.GetRandomElement())).ToList();
+                .Select(i => new Shape(i, oneSidedShapes.GetRandomElement(), shapeSize)).ToList();
         }
 
         public static List<OneSidedShape> GenerateOneSidedShapes(int maxSize)
