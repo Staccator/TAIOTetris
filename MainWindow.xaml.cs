@@ -63,6 +63,8 @@ namespace Tetris
             ResolutionSurface.Clear();
             DisplayMethods.DisplayInputShapes(shapeSize, shapes, InputSurface);
 
+            shapes[0].OneSidedShape.GenerateCuts(shapeSize);
+
             EnableButtons();
             HideOverlay();
         }
