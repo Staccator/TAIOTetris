@@ -47,11 +47,15 @@ namespace Tetris.Algorithms
 
                 if (bestResult.points == null)
                 {
-                    var firstNotTrivialShape = shapes.First(s => s.Size > 1);
-                    shapes.RemoveAt(0);
-                    var split = firstNotTrivialShape.SplitIntoTwoRandomShapes();
-                    shapes.Add(split.Item1);
-                    shapes.Add(split.Item2);
+                    List<Shape> shapeSplits = new List<Shape>();
+                    foreach(var shape in shapes)
+                    {
+                        var split = shape.SplitIntoTwoRandomShapes();
+                        shapeSplits.Add(split.Item1);
+                        shapeSplits.Add(split.Item2);
+                    }
+
+                    shapes = shapeSplits;
                     continue;
                 }
 
