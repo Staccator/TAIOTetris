@@ -50,6 +50,28 @@ namespace Tetris.Shapes
             return (first, second);
         }
 
+        public List<(Shape, Shape)> GenerateAllCuts()
+        {
+            var shapes = GenerateCuts(OneSidedShape.FixedShapes[0]);
+            
+            if(OneSidedShape.FixedShapes.Count>1)
+                shapes.AddRange(GenerateCuts(OneSidedShape.FixedShapes[1]));
+
+            var result = new List<(Shape, Shape)>();
+
+            foreach(var shape in shapes)
+            {
+                var first = new Shape(Index, shape.Item1, shape.Item1.FixedShapes.First().Points.Length);
+                var second = new Shape(Index, shape.Item2, shape.Item2.FixedShapes.First().Points.Length);
+                first.Color = Color;
+                second.Color = Color;
+                result.Add((first, second));
+            }
+
+            return result;
+
+        }
+
         public List<(OneSidedShape, OneSidedShape)> GenerateCuts(FixedShape fixedShape)
         {
             int n = _size;

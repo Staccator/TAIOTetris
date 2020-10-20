@@ -31,7 +31,7 @@ namespace Tetris
             {0, new BasicTetrisFitter()},
             {1, new HeuristicTetrisFitter()},
             {2, new TestTetrisFitter()},
-            {3, new BasicTetrisFitter()},
+            {3, new ExactTetrisFitter()},
         };
 
         private async void ExecuteAlgorithmClick(object sender, RoutedEventArgs e)
@@ -73,6 +73,7 @@ namespace Tetris
             Button1.IsEnabled = true;
             Button2.IsEnabled = true;
             Button3.IsEnabled = true;
+            Button4.IsEnabled = true;
         }
 
         private void HideOverlay()
