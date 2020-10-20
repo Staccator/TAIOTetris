@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using Tetris.Services;
 using Tetris.Shapes;
 
 namespace Tetris.Algorithms
 {
-    class ExactTetrisFitter : TestTetrisFitter
+    class OptimalTetrisFitter : HeuristicTetrisFitter
     {
-        public override int[,] Fit(List<Shape> shapes)
+        public override int[,] Fit(List<Shape> shapes, CancellationToken tokenSourceToken)
         {
             int shapeSize = shapes.First().Size;
             int shapeCount = shapes.Count;
@@ -18,6 +19,7 @@ namespace Tetris.Algorithms
 
             while (!FitList(listsOfShapes[0], board, fitted))
             {
+                // TODO tokenSourceToken.ThrowIfCancellationRequested(); Move it somewhere where stuff happens all the time
                 // Here is a place for parallelization, we can check multiple lists at once. 
                 // What is more, we should find a way to check whether or not certain list was already processed.
 

@@ -25,10 +25,12 @@ namespace Tetris.Shapes
         }
 
         private Color GetRandomColor()
-            => Color.FromArgb(
-                Random.Next(255),
-                Random.Next(255),
-                Random.Next(255));
+            => Color.FromArgb(DiscreteInt(), DiscreteInt(), DiscreteInt());
+
+        private int DiscreteInt()
+        {
+            return 20 + Random.Next(7) * 30;
+        }
 
         public (Shape, Shape) SplitIntoTwoRandomShapes()
         {
@@ -40,7 +42,7 @@ namespace Tetris.Shapes
 
             // TODO situation where shape can't be split (e.g. shape with hole inside)
             var split = shapes.First();
-            
+
 
             var first = new Shape(Index, split.Item1, split.Item1.FixedShapes.First().Points.Length);
             var second = new Shape(Index, split.Item2, split.Item2.FixedShapes.First().Points.Length);
@@ -52,13 +54,13 @@ namespace Tetris.Shapes
         public List<(Shape, Shape)> GenerateAllCuts()
         {
             var shapes = GenerateCuts(OneSidedShape.FixedShapes[0]);
-            
-            if(OneSidedShape.FixedShapes.Count>1)
+
+            if (OneSidedShape.FixedShapes.Count > 1)
                 shapes.AddRange(GenerateCuts(OneSidedShape.FixedShapes[1]));
 
             var result = new List<(Shape, Shape)>();
 
-            foreach(var shape in shapes)
+            foreach (var shape in shapes)
             {
                 var first = new Shape(Index, shape.Item1, shape.Item1.FixedShapes.First().Points.Length);
                 var second = new Shape(Index, shape.Item2, shape.Item2.FixedShapes.First().Points.Length);
@@ -68,7 +70,6 @@ namespace Tetris.Shapes
             }
 
             return result;
-
         }
 
         public List<(OneSidedShape, OneSidedShape)> GenerateCuts(FixedShape fixedShape)
@@ -153,7 +154,7 @@ namespace Tetris.Shapes
 
             // Debug.Assert(leftResult.Count + rightResult.Count == n);
             if (leftResult.Count + rightResult.Count != n) return (false, (null, null));
-            
+
             return (true,
                 (OneSidedShape.FromListOfPoints(leftResult, n), OneSidedShape.FromListOfPoints(rightResult, n)));
         }

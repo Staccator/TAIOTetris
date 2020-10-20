@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using Tetris.Services;
 using Tetris.Shapes;
 
@@ -11,7 +12,7 @@ namespace Tetris.Algorithms
     {
         public const int EmptyField = -1;
         
-        public abstract int[,] Fit(List<Shape> shapes);
+        public abstract int[,] Fit(List<Shape> shapes, CancellationToken tokenSourceToken);
         
         protected int[,] CreateEmptyBoard(int area)
         {

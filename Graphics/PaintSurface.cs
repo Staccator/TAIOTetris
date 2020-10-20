@@ -81,6 +81,10 @@ namespace Tetris.Graphics
         {
             SetupBitmap(1, 1);
             var buffer = CreateNewBuffer();
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                buffer[i] = 32;
+            }
             CommitDraw(buffer);
         }
     }

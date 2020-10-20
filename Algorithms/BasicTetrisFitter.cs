@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using Tetris.Shapes;
 
 namespace Tetris.Algorithms
 {
     public class BasicTetrisFitter : TetrisFitter
     {
-        public override int[,] Fit(List<Shape> shapes)
+        public override int[,] Fit(List<Shape> shapes, CancellationToken tokenSourceToken)
         {
             int shapeSize = shapes.First().Size;
             var result = CreateEmptyBoard(shapes.Count * shapeSize);

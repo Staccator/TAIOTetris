@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using Tetris.Shapes;
 
 namespace Tetris.Services
@@ -18,11 +19,11 @@ namespace Tetris.Services
         private static Dictionary<int, List<OneSidedShape>> _oneSidedShapesOfSize =
             new Dictionary<int, List<OneSidedShape>>();
 
-        public static List<Shape> GenerateShapes(int shapeCount, int shapeSize)
+        public static List<Shape> GenerateShapes(int shapeCount, int shapeSize, CancellationToken cancellationToken)
         {
             if (!_oneSidedShapesOfSize.ContainsKey(shapeSize))
             {
-                _oneSidedShapesOfSize[shapeSize] = GenerateOneSidedShapes(shapeSize);
+                _oneSidedShapesOfSize[shapeSize] = GenerateOneSidedShapes(shapeSize, cancellationToken);
             }
 
             var oneSidedShapes = _oneSidedShapesOfSize[shapeSize];
@@ -30,7 +31,7 @@ namespace Tetris.Services
                 .Select(i => new Shape(i, oneSidedShapes.GetRandomElement(), shapeSize)).ToList();
         }
 
-        public static List<OneSidedShape> GenerateOneSidedShapes(int maxSize)
+        public static List<OneSidedShape> GenerateOneSidedShapes(int maxSize, CancellationToken cancellationToken)
         {
             int startSize = 1;
             int lastAddedCellNumber = 1;
@@ -44,21 +45,20 @@ namespace Tetris.Services
             board[startingCell.X, startingCell.Y] = true;
             var result = new List<OneSidedShape>();
 
-            GenerateBiggerShapes(cellStack, cellsToCheck, startSize, maxSize, lastAddedCellNumber, board, result);
+            GenerateBiggerShapes(cellStack, cellsToCheck, startSize, maxSize, lastAddedCellNumber, board, result, cancellationToken);
 
             return result;
         }
 
-        private static void GenerateBiggerShapes(
-            Stack<Cell> cellStack,
+        private static void GenerateBiggerShapes(Stack<Cell> cellStack,
             List<Cell> cellsToCheck,
             int currentSize,
             int maxSize,
             int lastAddedCellNumber,
             bool[,] board,
-            List<OneSidedShape> resultShapes
-        )
+            List<OneSidedShape> resultShapes, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             if (currentSize == maxSize)
             {
                 var fixedShape = cellStack.Select(c => new Point(c.X, c.Y)).ToList();
@@ -79,7 +79,7 @@ namespace Tetris.Services
                 cellStack.Push(cell);
                 GenerateBiggerShapes(cellStack, cellsToCheck.Where(c => c != cell).ToList(),
                     currentSize + 1, maxSize, lastAddedCellNumber + adjacentCells.Count,
-                    board, resultShapes);
+                    board, resultShapes, cancellationToken);
                 cellStack.Pop();
             }
 
