@@ -10,7 +10,6 @@ using Tetris.Algorithms;
 using Tetris.Graphics;
 using Tetris.Services;
 using Tetris.Shapes;
-using Point = System.Drawing.Point;
 
 namespace Tetris
 {
