@@ -120,13 +120,6 @@ namespace Tetris.Shapes
             var leftPointsToCheck = new Queue<Point>();
             var rightPointsToCheck = new Queue<Point>();
 
-            // matrix = new bool[4, 4];
-            // matrix[0, 1] = true;matrix[1, 0] = true;matrix[1, 1] = true;matrix[2, 0] = true;
-            // n = 4;
-            // gapX = 0;
-            // gapY = 1;
-            // gapHeight = 1;
-
             if (gapY > 0) // one below
             {
                 if (matrix[gapX, gapY - 1]) leftPointsToCheck.Enqueue(new Point(gapX, gapY - 1));
