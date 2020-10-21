@@ -145,7 +145,6 @@ namespace Tetris.Shapes
             ExpandShape(matrix, n, leftPointsToCheck, leftResult);
             ExpandShape(matrix, n, rightPointsToCheck, rightResult);
 
-            // Debug.Assert(leftResult.Count + rightResult.Count == n);
             if (leftResult.Count + rightResult.Count != n) return (false, (null, null));
 
             return (true,
