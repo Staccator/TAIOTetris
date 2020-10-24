@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
@@ -21,14 +22,15 @@ namespace Tetris.Services
 
         public static List<Shape> GenerateShapes(int shapeCount, int shapeSize, CancellationToken cancellationToken)
         {
-            if (!_oneSidedShapesOfSize.ContainsKey(shapeSize))
-            {
-                _oneSidedShapesOfSize[shapeSize] = GenerateOneSidedShapes(shapeSize, cancellationToken);
-            }
-
-            var oneSidedShapes = _oneSidedShapesOfSize[shapeSize];
+            // if (!_oneSidedShapesOfSize.ContainsKey(shapeSize))
+            // {
+            //     _oneSidedShapesOfSize[shapeSize] = GenerateOneSidedShapes(shapeSize, cancellationToken);
+            // }
+            //
+            // var oneSidedShapes = _oneSidedShapesOfSize[shapeSize];
             return Enumerable.Range(0, shapeCount)
-                .Select(i => new Shape(i, oneSidedShapes.GetRandomElement(), shapeSize)).ToList();
+                .Select(i => new Shape(i, GenerateRandomOneSidedShape(shapeSize, cancellationToken), shapeSize))
+                .ToList();
         }
 
         public static List<OneSidedShape> GenerateOneSidedShapes(int maxSize, CancellationToken cancellationToken)
@@ -45,7 +47,8 @@ namespace Tetris.Services
             board[startingCell.X, startingCell.Y] = true;
             var result = new List<OneSidedShape>();
 
-            GenerateBiggerShapes(cellStack, cellsToCheck, startSize, maxSize, lastAddedCellNumber, board, result, cancellationToken);
+            GenerateBiggerShapes(cellStack, cellsToCheck, startSize, maxSize, lastAddedCellNumber, board, result,
+                cancellationToken);
 
             return result;
         }
@@ -84,6 +87,61 @@ namespace Tetris.Services
             }
 
             adjacentCells.ForEach(c => board[c.X, c.Y] = false);
+        }
+
+        public static OneSidedShape GenerateRandomOneSidedShape(int maxSize, CancellationToken cancellationToken)
+        {
+            OneSidedShape result = null;
+            while (result is null)
+            {
+                int startSize = 1;
+                int lastAddedCellNumber = 1;
+                var cellsToCheck = new List<Cell>();
+
+                var startingCell = new Cell(maxSize - 1, 0, lastAddedCellNumber);
+                var cellStack = new Stack<Cell>();
+                cellStack.Push(startingCell);
+
+                var board = new bool[2 * maxSize - 1, maxSize];
+                board[startingCell.X, startingCell.Y] = true;
+
+                result = GenerateRandomBiggerShape(cellStack, cellsToCheck, startSize, maxSize, lastAddedCellNumber,
+                    board, cancellationToken);
+            }
+
+            return result;
+        }
+
+        private static OneSidedShape GenerateRandomBiggerShape(Stack<Cell> cellStack,
+            List<Cell> cellsToCheck,
+            int currentSize,
+            int maxSize,
+            int lastAddedCellNumber,
+            bool[,] board,
+            CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (currentSize == maxSize)
+            {
+                var fixedShape = cellStack.Select(c => new Point(c.X, c.Y)).ToList();
+                return OneSidedShape.FromListOfPoints(fixedShape, maxSize);
+            }
+
+            var currentCell = cellStack.Peek();
+
+            List<Cell> adjacentCells = GenerateAdjacentCells(board, currentCell, lastAddedCellNumber, maxSize);
+            cellsToCheck.RemoveAll(c => c.Number < currentCell.Number);
+            cellsToCheck.AddRange(adjacentCells);
+
+            if (!cellsToCheck.Any()) return null;
+
+            adjacentCells.ForEach(c => board[c.X, c.Y] = true);
+
+            var randomCell = cellsToCheck.GetRandomElement();
+            cellStack.Push(randomCell);
+            return GenerateRandomBiggerShape(cellStack, cellsToCheck.Where(c => c != randomCell).ToList(),
+                currentSize + 1, maxSize, lastAddedCellNumber + adjacentCells.Count,
+                board, cancellationToken);
         }
 
         private static List<Cell> GenerateAdjacentCells(bool[,] board, Cell currentCell, int lastAddedCellNumber,
