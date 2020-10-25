@@ -165,6 +165,7 @@ namespace Tetris
                 _generatedShapes = (shapes, fileShapeSize);
                 ResolutionSurface.Clear();
                 DisplayMethods.DisplayInputShapes(fileShapeSize, shapes, InputSurface);
+                EnableButtons();
             }
         }
     }
