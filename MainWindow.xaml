@@ -59,17 +59,15 @@
                                             FontSize="25" />
                     </Grid>
                     <Button Content="Generuj Klocki" Click="GenerateShapesClick" />
+                    <Button Content="Załaduj z pliku" Click="LoadPentominoes" IsEnabled="True"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition /> <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
                         <Button Grid.Row="0" Grid.Column="0" Name="Button1" Content="Heurystyczny" Tag="0" Click="ExecuteAlgorithmClick" IsEnabled="False"/>
                         <Button Grid.Row="0" Grid.Column="1" Name="Button2" Content="Optymalny" Tag="1" Click="ExecuteAlgorithmClick" IsEnabled="False"/>
                     </Grid>
-                    <Button Content="Load pentominoes" Click="LoadPentominoes" IsEnabled="True"/>
+                    <Label Name="Results" FontSize="20"></Label>
                     <Image Name="InputImage"
                            Width="280"
                            HorizontalAlignment="Center" />

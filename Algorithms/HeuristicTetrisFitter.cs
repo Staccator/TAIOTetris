@@ -11,6 +11,7 @@ namespace Tetris.Algorithms
         public override (int[,],int) Fit(List<Shape> shapes, CancellationToken tokenSourceToken)
         {
             int shapeCount = shapes.Count;
+            int splitCount = 0;
             var result = CreateEmptyBoard(shapeCount * shapes.First().Size);
 
             int width = result.GetLength(0);
@@ -55,6 +56,7 @@ namespace Tetris.Algorithms
                         var split = shape.SplitIntoTwoRandomShapes();
                         shapeSplits.Add(split.Item1);
                         shapeSplits.Add(split.Item2);
+                        splitCount++;
                     }
 
                     shapes = shapeSplits;
@@ -69,7 +71,7 @@ namespace Tetris.Algorithms
                 shapes.Remove(bestResult.shape);
             }
 
-            return (result,0);
+            return (result, splitCount);
         }
     }
 }

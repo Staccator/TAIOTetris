@@ -55,8 +55,10 @@ namespace Tetris
 
             try
             {
+                var sw = Stopwatch.StartNew();
                 var fitResult = await Task.Run(() => tetrisFitter.Fit(shapes.ToList(), _tokenSource.Token));
                 DisplayMethods.DisplayBoard(fitResult.Item1, indexToColor, ResolutionSurface);
+                Results.Content = $"Cięcia: {fitResult.Item2}, Czas: {sw.ElapsedMilliseconds}ms";
             }
             catch (OperationCanceledException oce)
             {
