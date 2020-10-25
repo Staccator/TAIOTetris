@@ -17,7 +17,7 @@ namespace Tetris.Algorithms
             List<Shape> fitted = new List<Shape>();
             List<List<Shape>> listsOfShapes = new List<List<Shape>>() { shapes };
 
-            while (!FitList(listsOfShapes[0], board, fitted))
+            while (!FitList(listsOfShapes[0], board, fitted, tokenSourceToken))
             {
                 // TODO tokenSourceToken.ThrowIfCancellationRequested(); Move it somewhere where stuff happens all the time
                 // Here is a place for parallelization, we can check multiple lists at once. 
@@ -44,11 +44,12 @@ namespace Tetris.Algorithms
             return board;
         }
 
-        private bool FitList(List<Shape> shapes, int[,] board, List<Shape> fitted)
+        private bool FitList(List<Shape> shapes, int[,] board, List<Shape> fitted, CancellationToken tokenSourceToken)
         {
             if (fitted.Count == shapes.Count)
                 return true;
 
+            tokenSourceToken.ThrowIfCancellationRequested();
             foreach (var shape in shapes)
             {
                 if (fitted.Contains(shape))
@@ -63,7 +64,7 @@ namespace Tetris.Algorithms
 
                     if (TryToFit(fixedShape, board, shape.Index, addedPoints))
                     {
-                        if (FitList(shapes, board, fitted))
+                        if (FitList(shapes, board, fitted, tokenSourceToken))
                             return true;
 
                         RemoveShapeFromBoard(board, addedPoints);
