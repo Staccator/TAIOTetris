@@ -33,6 +33,11 @@ namespace Tetris.Services
                 .ToList();
         }
 
+        public static List<OneSidedShape> GetAllPentominoes()
+        {
+            return GenerateOneSidedShapes(5, CancellationToken.None);
+        }
+
         public static List<OneSidedShape> GenerateOneSidedShapes(int maxSize, CancellationToken cancellationToken)
         {
             int startSize = 1;

@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Xml.Serialization;
+using Microsoft.Win32;
 using Tetris.Algorithms;
 using Tetris.Graphics;
 using Tetris.Services;
@@ -125,6 +128,44 @@ namespace Tetris
         private void CancelOperationClick(object sender, RoutedEventArgs e)
         {
             _tokenSource.Cancel();
+        }
+
+        private void LoadPentominoes(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog
+            {
+                Title = "Load pentominoes",
+                CheckFileExists = true,
+                CheckPathExists = true,
+                FilterIndex = 2,
+                RestoreDirectory = true,
+            };
+
+            var result = ofd.ShowDialog();
+            const int fileShapeSize = 5;
+
+            if (result.HasValue && result.Value)
+            {
+                var file = File.ReadAllText(ofd.FileName);
+                var split = file.Split(new[] {' ', '\r', '\n'}, StringSplitOptions.RemoveEmptyEntries);
+                var shapeCounts = split.Take(18).Select(int.Parse).ToList();
+                var pentominoes = ShapeGenerator.GenerateOneSidedShapes(fileShapeSize, CancellationToken.None);
+
+                var shapes = new List<Shape>();
+                int shapeIndex = 0;
+                for (int i = 0; i < shapeCounts.Count; i++)
+                {
+                    var oneSidedShape = pentominoes[i];
+                    for (int j = 0; j < shapeCounts[i]; j++)
+                    {
+                        shapes.Add(new Shape(shapeIndex++, oneSidedShape, fileShapeSize));
+                    }
+                }
+
+                _generatedShapes = (shapes, fileShapeSize);
+                ResolutionSurface.Clear();
+                DisplayMethods.DisplayInputShapes(fileShapeSize, shapes, InputSurface);
+            }
         }
     }
 }
