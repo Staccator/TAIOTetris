@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection.Metadata;
+using System.Security.Policy;
 using System.Threading;
 using Tetris.Services;
 using Tetris.Shapes;
@@ -16,10 +19,10 @@ namespace Tetris.Algorithms
             int[,] board = CreateEmptyBoard(shapeCount * shapeSize);
             List<Shape> fitted = new List<Shape>();
             List<List<Shape>> listsOfShapes = new List<List<Shape>>() { shapes };
+            List <string> checkedLists = new List<string>();
 
             while (!FitList(listsOfShapes[0], board, fitted, tokenSourceToken))
             {
-                // TODO tokenSourceToken.ThrowIfCancellationRequested(); Move it somewhere where stuff happens all the time
                 // Here is a place for parallelization, we can check multiple lists at once. 
                 // What is more, we should find a way to check whether or not certain list was already processed.
 
@@ -35,7 +38,9 @@ namespace Tetris.Algorithms
                         var listToAdd = new List<Shape>(checkedList);
                         listToAdd.Add(split.Item1);
                         listToAdd.Add(split.Item2);
-                        listsOfShapes.Add(listToAdd);
+
+                        if (!IsAlreadyChecked(checkedLists, listToAdd))
+                            listsOfShapes.Add(listToAdd);
                     }
                     checkedList.Insert(i, shape);
                 }
@@ -105,6 +110,36 @@ namespace Tetris.Algorithms
                 }
 
             return false;
+        }
+
+        private bool IsAlreadyChecked(List<string> checkedLists, List<Shape> shapesList)
+        {
+            string hash = ListToHash(shapesList);
+
+            if (checkedLists.Contains(hash))
+                return true;
+
+            checkedLists.Add(hash);
+            return false;
+        }
+
+        private string ListToHash(List<Shape> list)
+        {
+            List<string> listHash = new List<string>();
+
+            foreach(var shape in list)
+            {
+                List<int> shapesCodes = new List<int>();
+                foreach(var point in shape.OneSidedShape.FixedShapes[0].Points)
+                {
+                    shapesCodes.Add(point.X + point.Y * shape.Size);
+                }
+                shapesCodes.Sort();
+                string hash = string.Join(".",shapesCodes.ToArray());
+                listHash.Add(hash);
+            }
+            listHash.Sort();
+            return string.Join("_",listHash.ToArray());
         }
     }
 }

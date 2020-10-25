@@ -64,13 +64,12 @@
                             <ColumnDefinition /> <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition /> <RowDefinition />
+                            <RowDefinition />
                         </Grid.RowDefinitions>
                         <Button Grid.Row="0" Grid.Column="0" Name="Button1" Content="Heurystyczny" Tag="0" Click="ExecuteAlgorithmClick" IsEnabled="False"/>
                         <Button Grid.Row="0" Grid.Column="1" Name="Button2" Content="Optymalny" Tag="1" Click="ExecuteAlgorithmClick" IsEnabled="False"/>
-                        <Button Grid.Row="1" Grid.Column="0" Name="Button3" Content="Bazowy" Tag="2" Click="ExecuteAlgorithmClick" IsEnabled="False"/>
-                        <Button Grid.Row="1" Grid.Column="1" Content="Load pentominoes" Click="LoadPentominoes" IsEnabled="True"/>
                     </Grid>
+                    <Button Content="Load pentominoes" Click="LoadPentominoes" IsEnabled="True"/>
                     <Image Name="InputImage"
                            Width="280"
                            HorizontalAlignment="Center" />
