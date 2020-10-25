@@ -12,7 +12,7 @@ namespace Tetris.Algorithms
 {
     class OptimalTetrisFitter : HeuristicTetrisFitter
     {
-        public override int[,] Fit(List<Shape> shapes, CancellationToken tokenSourceToken)
+        public override (int[,],int) Fit(List<Shape> shapes, CancellationToken tokenSourceToken)
         {
             int shapeSize = shapes.First().Size;
             int shapeCount = shapes.Count;
@@ -46,7 +46,7 @@ namespace Tetris.Algorithms
                 }
             }
 
-            return board;
+            return (board, listsOfShapes[0].Count-shapes.Count);
         }
 
         private bool FitList(List<Shape> shapes, int[,] board, List<Shape> fitted, CancellationToken tokenSourceToken)

@@ -41,7 +41,6 @@ namespace Tetris
         {
             {0, new HeuristicTetrisFitter()},
             {1, new OptimalTetrisFitter()},
-            {2, new BasicTetrisFitter()},
         };
 
         private async void ExecuteAlgorithmClick(object sender, RoutedEventArgs e)
@@ -57,7 +56,7 @@ namespace Tetris
             try
             {
                 var fitResult = await Task.Run(() => tetrisFitter.Fit(shapes.ToList(), _tokenSource.Token));
-                DisplayMethods.DisplayBoard(fitResult, indexToColor, ResolutionSurface);
+                DisplayMethods.DisplayBoard(fitResult.Item1, indexToColor, ResolutionSurface);
             }
             catch (OperationCanceledException oce)
             {

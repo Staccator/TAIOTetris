@@ -8,7 +8,7 @@ namespace Tetris.Algorithms
 {
     public class HeuristicTetrisFitter : TetrisFitter
     {
-        public override int[,] Fit(List<Shape> shapes, CancellationToken tokenSourceToken)
+        public override (int[,],int) Fit(List<Shape> shapes, CancellationToken tokenSourceToken)
         {
             int shapeCount = shapes.Count;
             var result = CreateEmptyBoard(shapeCount * shapes.First().Size);
@@ -69,7 +69,7 @@ namespace Tetris.Algorithms
                 shapes.Remove(bestResult.shape);
             }
 
-            return result;
+            return (result,0);
         }
     }
 }
