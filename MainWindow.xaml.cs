@@ -103,7 +103,6 @@ namespace Tetris
         {
             Button1.IsEnabled = true;
             Button2.IsEnabled = true;
-            Button3.IsEnabled = true;
         }
 
         private void HideOverlay()
