@@ -132,13 +132,17 @@ namespace Tetris
 
         private void LoadPentominoes(object sender, RoutedEventArgs e)
         {
+            var dll = new FileInfo(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            var filesToLoadDir = dll.Directory.Parent.Parent.Parent.FullName + "\\FilesToLoad";
+            
             OpenFileDialog ofd = new OpenFileDialog
             {
+                InitialDirectory = filesToLoadDir,
                 Title = "Load pentominoes",
+                FilterIndex = 2,
+                RestoreDirectory = false,
                 CheckFileExists = true,
                 CheckPathExists = true,
-                FilterIndex = 2,
-                RestoreDirectory = true,
             };
 
             var result = ofd.ShowDialog();

@@ -34,34 +34,17 @@ namespace Tetris.Shapes
 
         public (Shape, Shape) SplitIntoTwoRandomShapes()
         {
-            try
-            {
-                var shapes = GenerateCuts(OneSidedShape.FixedShapes[0]);
-                if (!shapes.Any())
-                {
-                    shapes = GenerateCuts(OneSidedShape.FixedShapes[1]);
-                }
+            var shapes = GenerateCuts(OneSidedShape.FixedShapes[0]);
 
-                // TODO situation where shape can't be split (e.g. shape with hole inside)
-                if (shapes.Any() is false)
-                {
-                    Console.WriteLine();
-                    var she = GenerateCuts(OneSidedShape.FixedShapes[0]);
-                }
-                var split = shapes.First();
+            if (OneSidedShape.FixedShapes.Count > 1)
+                shapes.AddRange(GenerateCuts(OneSidedShape.FixedShapes[1]));
 
-                var first = new Shape(Index, split.Item1, split.Item1.FixedShapes.First().Points.Length);
-                var second = new Shape(Index, split.Item2, split.Item2.FixedShapes.First().Points.Length);
-                first.Color = Color;
-                second.Color = Color;
-                return (first, second);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-
-            return (null, null);
+            var split = shapes.GetRandomElement();
+            var first = new Shape(Index, split.Item1, split.Item1.FixedShapes.First().Points.Length);
+            var second = new Shape(Index, split.Item2, split.Item2.FixedShapes.First().Points.Length);
+            first.Color = Color;
+            second.Color = Color;
+            return (first, second);
         }
 
         public List<(Shape, Shape)> GenerateAllCuts()
@@ -172,13 +155,17 @@ namespace Tetris.Shapes
                 var point = pointsToCheck.Dequeue();
                 var x = point.X;
                 var y = point.Y;
-                if (x > 0 && matrix[x - 1, y] && !resultShape.Contains(new Point(x - 1, y)) && !pointsToCheck.Contains(new Point(x - 1, y)))
+                if (x > 0 && matrix[x - 1, y] && !resultShape.Contains(new Point(x - 1, y)) &&
+                    !pointsToCheck.Contains(new Point(x - 1, y)))
                     pointsToCheck.Enqueue(new Point(x - 1, y));
-                if (x < n - 1 && matrix[x + 1, y] && !resultShape.Contains(new Point(x + 1, y)) && !pointsToCheck.Contains(new Point(x + 1, y)))
+                if (x < n - 1 && matrix[x + 1, y] && !resultShape.Contains(new Point(x + 1, y)) &&
+                    !pointsToCheck.Contains(new Point(x + 1, y)))
                     pointsToCheck.Enqueue(new Point(x + 1, y));
-                if (y > 0 && matrix[x, y - 1] && !resultShape.Contains(new Point(x, y - 1)) && !pointsToCheck.Contains(new Point(x, y - 1)))
+                if (y > 0 && matrix[x, y - 1] && !resultShape.Contains(new Point(x, y - 1)) &&
+                    !pointsToCheck.Contains(new Point(x, y - 1)))
                     pointsToCheck.Enqueue(new Point(x, y - 1));
-                if (y < n - 1 && matrix[x, y + 1] && !resultShape.Contains(new Point(x, y + 1)) && !pointsToCheck.Contains(new Point(x, y + 1)))
+                if (y < n - 1 && matrix[x, y + 1] && !resultShape.Contains(new Point(x, y + 1)) &&
+                    !pointsToCheck.Contains(new Point(x, y + 1)))
                     pointsToCheck.Enqueue(new Point(x, y + 1));
 
                 resultShape.Add(point);
