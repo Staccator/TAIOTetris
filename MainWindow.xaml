@@ -59,15 +59,20 @@
                                             FontSize="25" />
                     </Grid>
                     <Button Content="Generuj Klocki" Click="GenerateShapesClick" />
-                    <Button Content="Załaduj z pliku" Click="LoadPentominoes" IsEnabled="True"/>
+                    <Button Content="Załaduj z pliku" Click="LoadPentominoes" IsEnabled="True" />
+                    <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+                        <StackPanel Name="LoadedSetups" Orientation="Horizontal" />
+                    </ScrollViewer>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition /> <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Row="0" Grid.Column="0" Name="Button1" Content="Heurystyczny" Tag="0" Click="ExecuteAlgorithmClick" IsEnabled="False"/>
-                        <Button Grid.Row="0" Grid.Column="1" Name="Button2" Content="Optymalny" Tag="1" Click="ExecuteAlgorithmClick" IsEnabled="False"/>
+                        <Button Grid.Row="0" Grid.Column="0" Name="Button1" Content="Heurystyczny" Tag="0"
+                                Click="ExecuteAlgorithmClick" IsEnabled="False" />
+                        <Button Grid.Row="0" Grid.Column="1" Name="Button2" Content="Optymalny" Tag="1"
+                                Click="ExecuteAlgorithmClick" IsEnabled="False" />
                     </Grid>
-                    <Label Name="Results" FontSize="20"></Label>
+                    <Label Name="Results" FontSize="20" />
                     <Image Name="InputImage"
                            Width="280"
                            HorizontalAlignment="Center" />
@@ -82,7 +87,7 @@
         </Grid>
         <StackPanel Name="Overlay" Visibility="Hidden">
             <Label Content="Operacja w trakcie..." />
-            <Button Content="Przerwij operację" Click="CancelOperationClick"/>
+            <Button Content="Przerwij operację" Click="CancelOperationClick" />
         </StackPanel>
     </Grid>
 </Window>
